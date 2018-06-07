@@ -5,7 +5,6 @@ using UnityEngine;
 public class CastGrid : MonoBehaviour
 {
     //Variables
-    public float gridSize = 6f;
     private Vector2 lastPosition;
     private float lastAngle;
     private bool firstAdd;
@@ -49,7 +48,7 @@ public class CastGrid : MonoBehaviour
                     //If Not First Change, Add Point to List
                     if (!firstAdd)
                     {
-                        Debug.Log("LAST POINT: " + lastPosition + " LAST ANGLE: " + lastAngle + "------- CUR POINT: " + currentPosition + " CUR ANGLE: " + currentAngle);
+                        //Debug.Log("LAST POINT: " + lastPosition + " LAST ANGLE: " + lastAngle + "------- CUR POINT: " + currentPosition + " CUR ANGLE: " + currentAngle);
                         points.Add(lastPosition);
                     }
                     else firstAdd = false;
@@ -64,7 +63,7 @@ public class CastGrid : MonoBehaviour
         lastPosition = currentPosition;
     }
 
-    //DEBUG
+    //On Destroy Method
     public void OnDestroy()
     {
         //Add Last Point
@@ -73,11 +72,8 @@ public class CastGrid : MonoBehaviour
         currentPosition = currentPosition - (Vector2)this.transform.position;
         points.Add(currentPosition);
 
-        //DEBUG
-        for (int i = 0; i < points.Count; i++)
-        {
-            Debug.Log(points[i]);
-        }
+        //Check Drawed Rune
+        SpellDatabase.checkRune(points);
     }
 
     //If Mouse Exit Area
