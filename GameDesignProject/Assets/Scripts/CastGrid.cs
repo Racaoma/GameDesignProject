@@ -2,22 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum AngleType
-{
-    None,
-    NearRight,
-    Acute
-};
-
 public class CastGrid : MonoBehaviour
 {
     //Variables
     public float gridSize = 6f;
     private Vector2 lastPosition;
-    private AngleType lastAngle;
+    private float lastAngle;
+    private bool firstAdd;
 
     //Angle Error Margin
-    private float angleErrorMargin = 15f;
+    private float angleErrorMargin = 20f;
 
     //Points List
     private List<Vector2> points;
@@ -25,7 +19,8 @@ public class CastGrid : MonoBehaviour
     //Start Method
     void Start()
     {
-        lastAngle = AngleType.None;
+        firstAdd = true;
+        lastAngle = 0f;
         lastPosition = Vector2.zero;
         points = new List<Vector2>();
         points.Add(Vector2.zero);
@@ -38,33 +33,35 @@ public class CastGrid : MonoBehaviour
         currentPosition = Camera.main.ScreenToWorldPoint(currentPosition);
         currentPosition = currentPosition - (Vector2) this.transform.position;
 
-        if(Mathf.Abs(currentPosition.x - lastPosition.x) >= 0.2f || Mathf.Abs(currentPosition.y - lastPosition.y) >= 0.2f)
+        //Check if Point is Sufficiently Distant from Last Point
+        if (Mathf.Abs(currentPosition.x - lastPosition.x) >= 0.1f || Mathf.Abs(currentPosition.y - lastPosition.y) >= 0.1f)
         {
             //Get Angle
             Vector2 atVector = currentPosition - lastPosition;
-            float ang = Mathf.Abs(Mathf.Atan2(atVector.y, atVector.x) * Mathf.Rad2Deg) % 180f;
+            float currentAngle = Mathf.Abs(Mathf.Atan2(atVector.y, atVector.x) * Mathf.Rad2Deg) % 180f;
 
-            Debug.Log("POINT: " + currentPosition + " ANGLE: " + ang);
-
-            //Add Point to List
-            if ((lastAngle == AngleType.None || lastAngle == AngleType.Acute) && ((ang < angleErrorMargin || ang > (180f - angleErrorMargin)) || (ang > (90f - angleErrorMargin) && ang < (90f + angleErrorMargin))))
+            //Check if There is a Significant Change in Angles
+            if ((Mathf.Abs(currentAngle - lastAngle) >= angleErrorMargin) && ((currentAngle + lastAngle + angleErrorMargin) % 180 >= angleErrorMargin))
             {
-                //Debug.Log("POINT: " + currentPosition + " ANGLE: " + ang);
-                Debug.Log("ADDED");
-                points.Add(currentPosition);
-                lastAngle = AngleType.NearRight;
-            }
-            else if(ang >= angleErrorMargin && ang <= (180f - angleErrorMargin))
-            {
-                //Debug.Log("POINT: " + currentPosition + " ANGLE: " + ang);
-                Debug.Log("ADDED");
-                points.Add(currentPosition);
-                lastAngle = AngleType.Acute;
+                //Check for Angle Errors
+                if (!((lastPosition.x == currentPosition.x || lastPosition.y == currentPosition.y) && (currentAngle % 90f != 0)))
+                {
+                    //If Not First Change, Add Point to List
+                    if (!firstAdd)
+                    {
+                        Debug.Log("LAST POINT: " + lastPosition + " LAST ANGLE: " + lastAngle + "------- CUR POINT: " + currentPosition + " CUR ANGLE: " + currentAngle);
+                        points.Add(lastPosition);
+                    }
+                    else firstAdd = false;
+                }
             }
 
-            //Update Last Position
-            lastPosition = currentPosition;
+            //Update Last Angle
+            lastAngle = currentAngle;
         }
+
+        //Update Last Position
+        lastPosition = currentPosition;
     }
 
     //DEBUG
@@ -79,7 +76,7 @@ public class CastGrid : MonoBehaviour
         //DEBUG
         for (int i = 0; i < points.Count; i++)
         {
-            //Debug.Log(points[i]);
+            Debug.Log(points[i]);
         }
     }
 
