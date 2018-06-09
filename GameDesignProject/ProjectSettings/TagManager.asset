@@ -13,7 +13,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - EffectRender
   - 
   - 
   - 
@@ -46,4 +46,7 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 3751348057
+    locked: 0
+  - name: FillEffect
+    uniqueID: 3576258245
     locked: 0
