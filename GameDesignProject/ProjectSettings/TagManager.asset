@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - RuneSphere
   layers:
   - Default
   - TransparentFX
@@ -14,7 +15,7 @@ TagManager:
   - 
   - 
   - EffectRender
-  - 
+  - CastingRune
   - 
   - 
   - 
@@ -46,7 +47,4 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 3751348057
-    locked: 0
-  - name: FillEffect
-    uniqueID: 3576258245
     locked: 0

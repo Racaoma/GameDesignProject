@@ -1,13 +1,17 @@
 fileFormatVersion: 2
-guid: f65d5f11500f88f4db0f9605d923eeff
+guid: 6ff682481a865454fb8b80bb414161f8
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Sphere_Light_0
-    21300002: Sphere_Light_1
-    21300004: Sphere_Light_2
-    21300006: Sphere_Light_3
-    21300008: Sphere_Light_4
-    21300010: Sphere_Light_5
+    21300000: SmallSphereLight_0
+    21300002: SmallSphereLight_1
+    21300004: SmallSphereLight_2
+    21300006: SmallSphereLight_3
+    21300008: SmallSphereLight_4
+    21300010: SmallSphereLight_5
+    21300012: SmallSphereLight_6
+    21300014: SmallSphereLight_7
+    21300016: SmallSphereLight_8
+    21300018: SmallSphereLight_9
   externalObjects: {}
   serializedVersion: 5
   mipmaps:
@@ -35,7 +39,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: -1
     aniso: -1
     mipBias: -1
     wrapU: 1
@@ -49,7 +53,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 64
+  spritePixelsToUnits: 50
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -99,13 +103,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Sphere_Light_0
+      name: SmallSphereLight_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 67
-        width: 67
-        height: 67
+        y: 31
+        width: 31
+        height: 31
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -113,19 +117,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9b54fc21f85876a4a905e27ca768e435
+      spriteID: c26b0ad68b4d22046aca55383a889a62
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Sphere_Light_1
+      name: SmallSphereLight_1
       rect:
         serializedVersion: 2
-        x: 67
-        y: 67
-        width: 67
-        height: 67
+        x: 31
+        y: 31
+        width: 31
+        height: 31
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -133,19 +137,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8c1530f57654cec40bdd4335a9ec695f
+      spriteID: 3a83e652fe8f27b4e995e10ac4132dbc
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Sphere_Light_2
+      name: SmallSphereLight_2
       rect:
         serializedVersion: 2
-        x: 134
-        y: 67
-        width: 67
-        height: 67
+        x: 62
+        y: 31
+        width: 31
+        height: 31
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -153,19 +157,59 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6ea7565aa6765d44da56419286c0f026
+      spriteID: f2da278fd75690a44856bcb01397b73c
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Sphere_Light_3
+      name: SmallSphereLight_3
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 31
+        width: 31
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 503a96759764f784985a7935ed6daf41
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSphereLight_4
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 31
+        width: 31
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8e37cfaa4335bd48892d11d8b21e706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSphereLight_5
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 67
-        height: 67
+        width: 31
+        height: 31
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -173,19 +217,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2b25a8827d7717b4ca3ff72ed3220bbe
+      spriteID: a495079406bd9d04384aa66f54f2177e
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Sphere_Light_4
+      name: SmallSphereLight_6
       rect:
         serializedVersion: 2
-        x: 67
+        x: 31
         y: 0
-        width: 67
-        height: 67
+        width: 31
+        height: 31
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -193,19 +237,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 48157b1f680e0fc44814de5d9f9dcc1e
+      spriteID: 711a984a532fb2444bcc7970b0022c36
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Sphere_Light_5
+      name: SmallSphereLight_7
       rect:
         serializedVersion: 2
-        x: 134
+        x: 62
         y: 0
-        width: 67
-        height: 67
+        width: 31
+        height: 31
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -213,7 +257,47 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 272a86908bfb2854c9062f27287ff1c6
+      spriteID: ad5e823de9793bb48acd11ade5ab7297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSphereLight_8
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 0
+        width: 31
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 273842815bf5ae141aec4b9dba191b7f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallSphereLight_9
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 0
+        width: 31
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80cb6f95c4a76404097187e5afcf8c38
       vertices: []
       indices: 
       edges: []
@@ -221,7 +305,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: b9bbed361a16a074da81dfd255b59ce2
+    spriteID: e2a7b014cf3cc134d938126434345e03
     vertices: []
     indices: 
     edges: []

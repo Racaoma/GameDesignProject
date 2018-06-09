@@ -7,7 +7,8 @@
 		_Cutoff("Alpha cutoff", Range(0,1)) = 0.1
 		_Color("Color", Color) = (1.0, 1.0, 1.0, 1.0)
 	}
-		SubShader
+
+	SubShader
 	{
 		Tags{ "Queue" = "Transparent" }
 		Lighting Off
@@ -15,12 +16,13 @@
 		Blend SrcAlpha OneMinusSrcAlpha
 		AlphaTest GEqual[_Cutoff]
 		Pass
-	{
-		SetTexture[_Mask]{ combine texture }
-		SetTexture[_MainTex]{ 
-			constantColor[_Color]
-			combine texture*constant, previous 
+		{
+			SetTexture[_Mask] { combine texture }
+			SetTexture[_MainTex]
+			{ 
+				constantColor[_Color]
+				combine texture*constant, previous 
+			}
 		}
-	}
 	}
 }

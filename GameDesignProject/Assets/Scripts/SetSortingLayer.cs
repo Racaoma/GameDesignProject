@@ -7,6 +7,6 @@ public class SetSortingLayer : MonoBehaviour
 	private void Start()
     {
         var renderer = GetComponent<Renderer>();
-        renderer.sortingLayerName = "FillEffect";
+        renderer.sortingLayerName = "UI";
     }
 }
