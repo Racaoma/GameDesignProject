@@ -2,68 +2,61 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Spell
+public enum SpellName
 {
     None,
+    BlindingFlash,
     FireBlast,
     LightningStrike
 };
 
+public struct Spell
+{
+    public SpellName name;
+    public bool[] spellRune;
+
+    public Spell(SpellName name, bool[] spellRune)
+    {
+        this.name = name;
+        this.spellRune = spellRune;
+    }
+}
+
 public static class SpellDatabase
 {
-    //Grid Size
-    public static float gridSize = 6f;
-    public static float errorMargin = 2f;
+    //Spell
+    public static Spell blindingFlashSpell = new Spell(SpellName.BlindingFlash, new bool[] { true, true, true, true, true, false, false, false, false, false, false, false, false, true, true, true, true, false });
+    public static Spell fireBlastRuneSpell = new Spell(SpellName.FireBlast, new bool[] { true, false, false, false, false, true, true, false, false, false, false, true, true, true, true, false, false, false });
+    public static Spell lightningStrikeSpell = new Spell(SpellName.LightningStrike, new bool[] { true, false, false, true, false, false, false, false, true, true, true, false, false, false, false, true, false, true });
 
-    //Spell Runes
-    public static Vector2[] fireBlastRune = { Vector2.zero, new Vector2(-gridSize/2,-gridSize/2), new Vector2(-gridSize/2, gridSize/2), new Vector2(gridSize/2, gridSize/2), new Vector2(gridSize/2, -gridSize/2) };
-    public static Vector2[] lightningStrikeRune = { Vector2.zero, new Vector2(-gridSize/2, gridSize/2), new Vector2(gridSize/2, gridSize/2), new Vector2(-gridSize/2, -gridSize/2), new Vector2(gridSize/2, -gridSize/2) };
-    //TODO: Continue
+    //Spell List
+    public static Spell[] spells = { blindingFlashSpell, fireBlastRuneSpell, lightningStrikeSpell };
 
     //Compare Rune Method
-    public static Spell checkRune(List<Vector2> drawed)
+    public static bool compareRune(Spell spellToCompare, bool[] drawedRune)
     {
-        //Rune Precision Variables
-        float fireBlastPrecision = 0f;
-        float lightningStrikePrecision = 0f;
-
-        //Spell Iterators
-        int fireblastIterator = 0;
-        int lightningStrikeIterator = 0;
-
-        //Test Distance to Preset Runes
-        for (int i = 0; i < drawed.Count; i++)
+        for(int i = 0; i < spellToCompare.spellRune.Length; i++)
         {
-            //FireBlast
-            float distanceFireBlast = (drawed[i] - fireBlastRune[fireblastIterator]).magnitude;
-            if (distanceFireBlast <= errorMargin)
-            {
-                fireBlastPrecision += distanceFireBlast;
-                fireblastIterator++;
-            }
+            if (spellToCompare.spellRune[i] != drawedRune[i]) return false;
+        }
 
-            //Lightning Strike
-            float distanceLightningStrike = (drawed[i] - lightningStrikeRune[lightningStrikeIterator]).magnitude;
-            if ((drawed[i] - lightningStrikeRune[lightningStrikeIterator]).magnitude <= errorMargin)
-            {
-                lightningStrikePrecision += distanceLightningStrike;
-                lightningStrikeIterator++;
-            }
+        return true;
+    }
 
-            //Check if Drawed Rune Correspond to Any Spell
-            if (fireblastIterator == fireBlastRune.Length)
+    //Compare All Spells
+    public static SpellName checkRune(bool[] drawedRune)
+    {
+        for(int i = 0; i < spells.Length; i++)
+        {
+            if (compareRune(spells[i], drawedRune))
             {
-                Debug.Log("FIREBLAST!");
-                return Spell.FireBlast;
-            }
-            else if(lightningStrikeIterator == lightningStrikeRune.Length)
-            {
-                Debug.Log("LIGHTNING STRIKE!");
-                return Spell.LightningStrike;
+                Debug.Log(spells[i].name);
+                return spells[i].name;
             }
         }
 
         //Drawing Miss!
-        return Spell.None;
+        Debug.Log("Miss!");
+        return SpellName.None;
     }
 }

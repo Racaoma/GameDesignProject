@@ -18,8 +18,6 @@ public class FollowMouse : MonoBehaviour
             Collider2D[] colliders = Physics2D.OverlapPointAll(mousePosition);
             for (int i = 0; i < colliders.Length; i++)
             {
-                Debug.Log(colliders[i].gameObject.layer);
-
                 if(colliders[i].gameObject.layer == 9)
                 {
                     transform.position = Vector2.Lerp(this.transform.position, mousePosition, moveSpeed);
