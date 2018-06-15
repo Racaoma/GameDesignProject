@@ -5,18 +5,69 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     //CastRunes Reference
-    public CastRunes castRunes;
+    public GameObject castRunes;
+
+    //Prepared Spell
+    private SpellName preparedSpell = SpellName.None;
+
+    //Singleton Instance Variable
+    private static Player instance;
+    public static Player Instance
+    {
+        get
+        {
+            return instance;
+        }
+    }
+
+    //On Object Awake
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+    }
+
+    //On Object Destroy (Safeguard)
+    public void OnDestroy()
+    {
+        instance = null;
+    }
+
+    //Prepare Spell
+    public void prepareSpell(SpellName spell)
+    {
+        if(spell != SpellName.None) Debug.Log("Prepared " + spell);
+        preparedSpell = spell;
+    }
 
     //On Mouse Click
     private void OnMouseDown()
     {
-        castRunes.gameObject.SetActive(true);
+        if (preparedSpell != SpellName.None) Debug.Log("Canceled " + preparedSpell);
+        preparedSpell = SpellName.None;
+        castRunes.SetActive(true);
     }
 
     //Update Method
     private void Update()
     {
-        //Reset CastRunes if Mouse is Released
-        if(Input.GetMouseButtonUp(0) && castRunes.gameObject.activeInHierarchy) castRunes.resetCastRunes();
+        //If Mouse is Released
+        if (Input.GetMouseButtonUp(0) && castRunes.activeInHierarchy) castRunes.GetComponent<CastRunes>().disableCastRunes();
+
+        //Check Mouse Click
+        else if (Input.GetMouseButtonDown(0) && preparedSpell != SpellName.None)
+        {
+            //TODO: Lauch Spell
+            Debug.Log("Casted " + preparedSpell);
+
+            //Reset Prepared Spell
+            preparedSpell = SpellName.None;
+        }
     }
 }
