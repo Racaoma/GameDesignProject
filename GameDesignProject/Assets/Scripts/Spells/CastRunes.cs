@@ -20,24 +20,35 @@ public class CastRunes : MonoBehaviour
     }
 
     //Activate Sphere Path
-    public bool activatePath(int sphereID)
+    public bool activatePath(GameObject sphere)
     {
+        //Get Sphere ID
+        int sphereID = sphere.GetComponent<RuneSphere>().sphereID;
+
         //If Stayed on Sphere
         if (sphereID == lastSphere) return false;
-        //else Debug.Log("FROM " + lastSphere + " TO " + sphereID);
+        else Debug.Log("FROM " + lastSphere + " TO " + sphereID);
 
         //Moved Between Spheres
         if(sphereID == 1)
         {
             if (lastSphere == 3) pathList[1].SetActive(true);
             else if (lastSphere == 4) pathList[0].SetActive(true);
-            else return false;
+            else
+            {
+                if (sphere.GetComponent<Animator>().isActiveAndEnabled) lastSphere = sphereID;
+                return false;
+            }
         }
         else if(sphereID == 2)
         {
             if (lastSphere == 3) pathList[2].SetActive(true);
             else if (lastSphere == 6) pathList[5].SetActive(true);
-            else return false;
+            else
+            {
+                if (sphere.GetComponent<Animator>().isActiveAndEnabled) lastSphere = sphereID;
+                return false;
+            }
         }
         else if (sphereID == 3)
         {
@@ -45,7 +56,11 @@ public class CastRunes : MonoBehaviour
             else if (lastSphere == 2) pathList[2].SetActive(true);
             else if (lastSphere == 4) pathList[3].SetActive(true);
             else if (lastSphere == 6) pathList[6].SetActive(true);
-            else return false;
+            else
+            {
+                if (sphere.GetComponent<Animator>().isActiveAndEnabled) lastSphere = sphereID;
+                return false;
+            }
         }
         else if (sphereID == 4)
         {
@@ -53,13 +68,21 @@ public class CastRunes : MonoBehaviour
             else if (lastSphere == 3) pathList[3].SetActive(true);
             else if (lastSphere == 5) pathList[4].SetActive(true);
             else if (lastSphere == 7) pathList[7].SetActive(true);
-            else return false;
+            else
+            {
+                if (sphere.GetComponent<Animator>().isActiveAndEnabled) lastSphere = sphereID;
+                return false;
+            }
         }
         else if (sphereID == 5)
         {
             if (lastSphere == 4) pathList[4].SetActive(true);
             else if (lastSphere == 8) pathList[8].SetActive(true);
-            else return false;
+            else
+            {
+                if (sphere.GetComponent<Animator>().isActiveAndEnabled) lastSphere = sphereID;
+                return false;
+            }
         }
         else if (sphereID == 6)
         {
@@ -68,7 +91,11 @@ public class CastRunes : MonoBehaviour
             else if (lastSphere == 7) pathList[9].SetActive(true);
             else if (lastSphere == 9) pathList[11].SetActive(true);
             else if (lastSphere == 10) pathList[12].SetActive(true);
-            else return false;
+            else
+            {
+                if (sphere.GetComponent<Animator>().isActiveAndEnabled) lastSphere = sphereID;
+                return false;
+            }
         }
         else if (sphereID == 7)
         {
@@ -76,7 +103,11 @@ public class CastRunes : MonoBehaviour
             else if (lastSphere == 6) pathList[9].SetActive(true);
             else if (lastSphere == 8) pathList[10].SetActive(true);
             else if (lastSphere == 10) pathList[13].SetActive(true);
-            else return false;
+            else
+            {
+                if (sphere.GetComponent<Animator>().isActiveAndEnabled) lastSphere = sphereID;
+                return false;
+            }
         }
         else if (sphereID == 8)
         {
@@ -84,14 +115,22 @@ public class CastRunes : MonoBehaviour
             else if (lastSphere == 7) pathList[10].SetActive(true);
             else if (lastSphere == 10) pathList[14].SetActive(true);
             else if (lastSphere == 11) pathList[15].SetActive(true);
-            else return false;
+            else
+            {
+                if (sphere.GetComponent<Animator>().isActiveAndEnabled) lastSphere = sphereID;
+                return false;
+            }
         }
         else if (sphereID == 9)
         {
             if (lastSphere == 6) pathList[11].SetActive(true);
             else if (lastSphere == 10) pathList[16].SetActive(true);
             else if (lastSphere == 12) pathList[18].SetActive(true);
-            else return false;
+            else
+            {
+                if (sphere.GetComponent<Animator>().isActiveAndEnabled) lastSphere = sphereID;
+                return false;
+            }
         }
         else if (sphereID == 10)
         {
@@ -103,14 +142,22 @@ public class CastRunes : MonoBehaviour
             else if (lastSphere == 12) pathList[19].SetActive(true);
             else if (lastSphere == 13) pathList[20].SetActive(true);
             else if (lastSphere == 14) pathList[21].SetActive(true);
-            else return false;
+            else
+            {
+                if (sphere.GetComponent<Animator>().isActiveAndEnabled) lastSphere = sphereID;
+                return false;
+            }
         }
         else if (sphereID == 11)
         {
             if (lastSphere == 8) pathList[15].SetActive(true);
             else if (lastSphere == 10) pathList[17].SetActive(true);
             else if (lastSphere == 14) pathList[22].SetActive(true);
-            else return false;
+            else
+            {
+                if (sphere.GetComponent<Animator>().isActiveAndEnabled) lastSphere = sphereID;
+                return false;
+            }
         }
         else if (sphereID == 12)
         {
@@ -118,7 +165,11 @@ public class CastRunes : MonoBehaviour
             else if (lastSphere == 10) pathList[19].SetActive(true);
             else if (lastSphere == 13) pathList[23].SetActive(true);
             else if (lastSphere == 16) pathList[25].SetActive(true);
-            else return false;
+            else
+            {
+                if (sphere.GetComponent<Animator>().isActiveAndEnabled) lastSphere = sphereID;
+                return false;
+            }
         }
         else if (sphereID == 13)
         {
@@ -127,7 +178,11 @@ public class CastRunes : MonoBehaviour
             else if (lastSphere == 14) pathList[24].SetActive(true);
             else if (lastSphere == 15) pathList[27].SetActive(true);
             else if (lastSphere == 18) pathList[26].SetActive(true);
-            else return false;
+            else
+            {
+                if (sphere.GetComponent<Animator>().isActiveAndEnabled) lastSphere = sphereID;
+                return false;
+            }
         }
         else if (sphereID == 14)
         {
@@ -135,7 +190,11 @@ public class CastRunes : MonoBehaviour
             else if (lastSphere == 11) pathList[22].SetActive(true);
             else if (lastSphere == 13) pathList[24].SetActive(true);
             else if (lastSphere == 15) pathList[28].SetActive(true);
-            else return false;
+            else
+            {
+                if (sphere.GetComponent<Animator>().isActiveAndEnabled) lastSphere = sphereID;
+                return false;
+            }
         }
         else if (sphereID == 15)
         {
@@ -147,13 +206,21 @@ public class CastRunes : MonoBehaviour
                 pathList[30].SetActive(true);
                 pathList[31].SetActive(true);
             }
-            else return false;
+            else
+            {
+                if (sphere.GetComponent<Animator>().isActiveAndEnabled) lastSphere = sphereID;
+                return false;
+            }
         }
         else if (sphereID == 16)
         {
             if (lastSphere == 12) pathList[25].SetActive(true);
             else if (lastSphere == 18) pathList[33].SetActive(true);
-            else return false;
+            else
+            {
+                if (sphere.GetComponent<Animator>().isActiveAndEnabled) lastSphere = sphereID;
+                return false;
+            }
         }
         else if (sphereID == 17)
         {
@@ -163,7 +230,11 @@ public class CastRunes : MonoBehaviour
                 pathList[30].SetActive(true);
                 pathList[32].SetActive(true);
             }
-            else return false;
+            else
+            {
+                if (sphere.GetComponent<Animator>().isActiveAndEnabled) lastSphere = sphereID;
+                return false;
+            }
         }
         else if (sphereID == 18)
         {
@@ -179,7 +250,11 @@ public class CastRunes : MonoBehaviour
                 pathList[30].SetActive(true);
                 pathList[32].SetActive(true);
             }
-            else return false;
+            else
+            {
+                if (sphere.GetComponent<Animator>().isActiveAndEnabled) lastSphere = sphereID;
+                return false;
+            }
         }
 
         //Update Last Sphere
