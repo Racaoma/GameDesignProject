@@ -27,7 +27,6 @@ public class CastRunes : MonoBehaviour
 
         //If Stayed on Sphere
         if (sphereID == lastSphere) return false;
-        else Debug.Log("FROM " + lastSphere + " TO " + sphereID);
 
         //Moved Between Spheres
         if(sphereID == 1)
