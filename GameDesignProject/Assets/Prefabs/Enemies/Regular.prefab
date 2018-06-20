@@ -130,7 +130,9 @@ MonoBehaviour:
   hitPoints: 30
   speed: 0.7
   spawnCost: 2
-  freeze: {fileID: 9100000, guid: ad35a7708f4acff4fad0a77310ecdf02, type: 2}
+  conditionAnimator: {fileID: 95854972345036126}
+  conditionSpriteRenderer: {fileID: 212154067072091268}
+  frozenAnimation: {fileID: 9100000, guid: ad35a7708f4acff4fad0a77310ecdf02, type: 2}
 --- !u!212 &212085890976008540
 SpriteRenderer:
   m_ObjectHideFlags: 1

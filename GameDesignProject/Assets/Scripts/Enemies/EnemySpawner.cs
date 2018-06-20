@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public struct EnemyType
 {
@@ -31,6 +32,9 @@ public class EnemySpawner : MonoBehaviour
     //Spawn Delay
     public float spawnDelay = 1f;
     private float remainingSpawnDelay;
+
+    //Wave Text Reference
+    public Text waveText;
 
     //Singleton Instance Variable
     private static EnemySpawner instance;
@@ -64,8 +68,6 @@ public class EnemySpawner : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        Debug.Log("Current Wave: 1");
-
         wave = 1;
         currentSpawnPoints = 5;
         remainingSpawnDelay = 0f;
@@ -170,7 +172,7 @@ public class EnemySpawner : MonoBehaviour
                 wave++;
                 currentSpawnPoints = 5 + (wave * 3);
                 remainingSpawnDelay = 3f;
-                Debug.Log("Current Wave: " + wave);
+                waveText.text = "Current Wave: " + wave;
             }
         }
 	}

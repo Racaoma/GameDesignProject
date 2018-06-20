@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Conditions
+public enum Condition
 {
     None,
-    Ablaze,
+    Stunned,
     Frozen,
-    Stunned
-};
+    Ablaze
+}
 
 public class Enemy : MonoBehaviour
 {
@@ -19,17 +19,30 @@ public class Enemy : MonoBehaviour
     public int spawnCost;
     public Action<GameObject> onDeathAction;
 
+    //Conditions Animator & Sprite Renderer Reference
+    public Animator conditionAnimator;
+    public SpriteRenderer conditionSpriteRenderer;
+
     //Conditions
-    private Conditions currentCondition = Conditions.None;
+    private Condition currentCondition;
     private float remainingConditionTime;
 
     //Conditions Animations
-    public RuntimeAnimatorController freeze;
+    public RuntimeAnimatorController frozenAnimation;
+
+    //Start Method
+    private void Start()
+    {
+        currentCondition = Condition.None;
+        GameObject child = this.transform.GetChild(0).gameObject;
+        conditionAnimator = child.GetComponent<Animator>();
+        conditionSpriteRenderer = child.GetComponent<SpriteRenderer>();
+    }
 
     //Kill Enemy
     public void killEnemy()
     {
-        currentCondition = Conditions.None;
+        currentCondition = Condition.None;
         this.transform.position = Vector2.zero;
         if (onDeathAction != null) onDeathAction(this.gameObject);
     }
@@ -37,7 +50,7 @@ public class Enemy : MonoBehaviour
     //Enemy Arrived at Destination
     public void retireEnemy()
     {
-        //TODO: Something
+        //TODO: reduce score/lifes
         killEnemy();
     }
 
@@ -48,14 +61,34 @@ public class Enemy : MonoBehaviour
     }
 
     //Set Condition Method
-    public void setCondition(Conditions condition, float time)
+    public void setCondition(Condition condition, float time)
     {
         //Set Condition
         currentCondition = condition;
         remainingConditionTime = time;
 
+        switch (condition)
+        {
+            case Condition.Frozen:
+                conditionAnimator.runtimeAnimatorController = frozenAnimation;
+                break;
+            case Condition.Stunned:
+                break;
+            case Condition.Ablaze:
+                break;
+        }
+
+
         //Change Animation
-        this.transform.GetChild(0).GetComponent<Animator>().runtimeAnimatorController = freeze;
+        conditionAnimator.runtimeAnimatorController = frozenAnimation;
+    }
+
+    //Clear Conditions Method
+    public void clearConditions()
+    {
+        currentCondition = Condition.None;
+        conditionAnimator.runtimeAnimatorController = null;
+        conditionSpriteRenderer.sprite = null;
     }
 
     // Update is called once per frame
@@ -66,19 +99,14 @@ public class Enemy : MonoBehaviour
         else
         {
             //Update Conditions
-            if (currentCondition != Conditions.None)
+            if (currentCondition != Condition.None)
             {
-                if (remainingConditionTime <= 0f)
-                {
-                    currentCondition = Conditions.None;
-                    this.transform.GetChild(0).GetComponent<Animator>().runtimeAnimatorController = null;
-                    this.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
-                }
+                if (remainingConditionTime <= 0f) clearConditions();
                 else remainingConditionTime -= Time.deltaTime;
             }
 
             //Check Movement Impairing Conditions
-            if(currentCondition != Conditions.Frozen && currentCondition != Conditions.Stunned)
+            if(currentCondition != Condition.Frozen && currentCondition != Condition.Stunned)
             {
                 //Move!
                 Vector2 target = new Vector2(-9.5f, this.transform.position.y);

@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    //CastRunes Reference
+    //References
     public GameObject castRunes;
-
-    //Spell Range Overlay Reference
     public SpellRangeOverlay spellRangeOverlay;
+    public ManaController manaController;
 
     //Prepared Spell
-    private SpellName preparedSpell = SpellName.None;
+    private Spell preparedSpell;
 
     //Singleton Instance Variable
     private static Player instance;
@@ -43,18 +42,22 @@ public class Player : MonoBehaviour
         instance = null;
     }
 
-    //Prepare Spell
-    public void prepareSpell(SpellName spell)
+    //Start Method
+    private void Start()
     {
-        if(spell != SpellName.None) Debug.Log("Prepared " + spell);
+        preparedSpell = null;
+    }
+
+    //Prepare Spell
+    public void prepareSpell(Spell spell)
+    {
         preparedSpell = spell;
     }
 
     //On Mouse Click
     private void OnMouseDown()
     {
-        if (preparedSpell != SpellName.None) Debug.Log("Canceled " + preparedSpell);
-        preparedSpell = SpellName.None;
+        preparedSpell = null;
         castRunes.SetActive(true);
     }
 
@@ -62,7 +65,7 @@ public class Player : MonoBehaviour
     public void setSpellRangeOverlay()
     {
         //Set Spell Range Overlay
-        switch (preparedSpell)
+        switch (preparedSpell.name)
         {
             case SpellName.FlashFreeze:
                 spellRangeOverlay.setSpellOverlay(SpellDatabase.flashFreezeSpell.areaType, SpellDatabase.flashFreezeSpell.spellRange, Camera.main.ScreenToWorldPoint(Input.mousePosition));
@@ -82,18 +85,27 @@ public class Player : MonoBehaviour
         //Get Affected Positions
         Vector2[] affectedArea = spellRangeOverlay.getAffectedArea();
 
+        //Spend Mana
+        ManaController.Instance.spendMana(preparedSpell.manaCost);
+
         //Flash Freeze
-        if(preparedSpell == SpellName.FlashFreeze) 
+        if (preparedSpell.name == SpellName.FlashFreeze) 
         {
             for (int i = 0; i < affectedArea.Length; i++)
             {
                 Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea[i], Vector2.one, 0f);
                 for(int j = 0; j < collisions.Length; j++)
                 {
-                    if (collisions[j].gameObject.tag == "Enemy") collisions[j].gameObject.GetComponent<Enemy>().setCondition(Conditions.Frozen, 3f);
+                    if (collisions[j].gameObject.tag == "Enemy") collisions[j].gameObject.GetComponent<Enemy>().setCondition(Condition.Frozen, 3f);
                 }
             }
         }
+
+        //Reset Prepared Spell
+        preparedSpell = null;
+
+        //Reset Spell Range Overlay
+        spellRangeOverlay.disableSpellOverlay();
     }
 
     //Update Method
@@ -101,23 +113,13 @@ public class Player : MonoBehaviour
     {
         //If Mouse is Released
         if (Input.GetMouseButtonUp(0) && castRunes.activeInHierarchy) castRunes.GetComponent<CastRunes>().disableCastRunes();
-        else if(preparedSpell != SpellName.None)
+        else if(preparedSpell != null)
         {
             //Set Spell Range Overlay
             setSpellRangeOverlay();
 
-            //Check Mouse Click
-            if (Input.GetMouseButtonDown(0))
-            {
-                //Cast Spell
-                castSpell();
-
-                //Reset Prepared Spell
-                preparedSpell = SpellName.None;
-
-                //Reset Spell Range Overlay
-                spellRangeOverlay.disableSpellOverlay();
-            }
+            //Check Mouse Click & Check if You have Enough Mana
+            if (Input.GetMouseButtonDown(0) && ManaController.Instance.getCurrentMana() >= preparedSpell.manaCost) castSpell();
         }
     }
 }
