@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     //References
     public GameObject castRunes;
     public SpellRangeOverlay spellRangeOverlay;
-    public ManaController manaController;
+    public MouseChanger mouseChanger;
 
     //Prepared Spell
     private Spell preparedSpell;
@@ -106,6 +106,9 @@ public class Player : MonoBehaviour
 
         //Reset Spell Range Overlay
         spellRangeOverlay.disableSpellOverlay();
+
+        //Reset Cursor
+        mouseChanger.resetMouse();
     }
 
     //Update Method
@@ -115,11 +118,17 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && castRunes.activeInHierarchy) castRunes.GetComponent<CastRunes>().disableCastRunes();
         else if(preparedSpell != null)
         {
+            //Check Mana Levels
+            bool hasMana = ManaController.Instance.getCurrentMana() >= preparedSpell.manaCost;
+
+            //Update Cursor
+            mouseChanger.changeMouse(preparedSpell, hasMana);
+
             //Set Spell Range Overlay
             setSpellRangeOverlay();
 
             //Check Mouse Click & Check if You have Enough Mana
-            if (Input.GetMouseButtonDown(0) && ManaController.Instance.getCurrentMana() >= preparedSpell.manaCost) castSpell();
+            if (Input.GetMouseButtonDown(0) && hasMana) castSpell();
         }
     }
 }
