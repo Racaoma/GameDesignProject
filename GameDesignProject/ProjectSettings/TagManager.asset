@@ -55,3 +55,6 @@ TagManager:
   - name: UI
     uniqueID: 3751348057
     locked: 0
+  - name: SpellEffects
+    uniqueID: 1620354901
+    locked: 0

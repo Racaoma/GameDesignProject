@@ -36,8 +36,6 @@ public class SpellRangeOverlay : MonoBehaviour
             int verticalCell = Mathf.FloorToInt(center.y + 3.75f) + 1;
             int horizontalCell = Mathf.FloorToInt(center.x + 8.25f) + 1;
 
-            Debug.Log(center + " - V: " + verticalCell + " - H: " + horizontalCell);
-
             //Check Area Type
             if (areaType == SpellAreaType.Square)
             {

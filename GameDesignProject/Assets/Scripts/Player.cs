@@ -7,7 +7,11 @@ public class Player : MonoBehaviour
     //References
     public GameObject castRunes;
     public SpellRangeOverlay spellRangeOverlay;
-    public MouseChanger mouseChanger;
+    public CursorChangerController mouseChanger;
+    public GameObject scenario;
+
+    //Internal References
+    private Animator animator;
 
     //Prepared Spell
     private Spell preparedSpell;
@@ -45,6 +49,7 @@ public class Player : MonoBehaviour
     //Start Method
     private void Start()
     {
+        animator = this.GetComponent<Animator>();
         preparedSpell = null;
     }
 
@@ -61,24 +66,6 @@ public class Player : MonoBehaviour
         castRunes.SetActive(true);
     }
 
-    //Set Spell Range Overlay
-    public void setSpellRangeOverlay()
-    {
-        //Set Spell Range Overlay
-        switch (preparedSpell.name)
-        {
-            case SpellName.FlashFreeze:
-                spellRangeOverlay.setSpellOverlay(SpellDatabase.flashFreezeSpell.areaType, SpellDatabase.flashFreezeSpell.spellRange, Camera.main.ScreenToWorldPoint(Input.mousePosition));
-                break;
-            case SpellName.FireBlast:
-                spellRangeOverlay.setSpellOverlay(SpellDatabase.fireBlastRuneSpell.areaType, SpellDatabase.fireBlastRuneSpell.spellRange, Camera.main.ScreenToWorldPoint(Input.mousePosition));
-                break;
-            case SpellName.LightningStrike:
-                spellRangeOverlay.setSpellOverlay(SpellDatabase.lightningStrikeSpell.areaType, SpellDatabase.lightningStrikeSpell.spellRange, Camera.main.ScreenToWorldPoint(Input.mousePosition));
-                break;
-        }
-    }
-
     //Cast Spell Logic
     public void castSpell()
     {
@@ -89,18 +76,46 @@ public class Player : MonoBehaviour
         ManaController.Instance.spendMana(preparedSpell.manaCost);
 
         //Flash Freeze
-        if (preparedSpell.name == SpellName.FlashFreeze) 
+        if (preparedSpell.name == SpellName.FlashFreeze)
         {
+            //Animate
+            animator.SetInteger("Spell", 0);
+            animator.SetTrigger("Cast");
+
             for (int i = 0; i < affectedArea.Length; i++)
             {
                 Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea[i], Vector2.one, 0f);
-                for(int j = 0; j < collisions.Length; j++)
+                for (int j = 0; j < collisions.Length; j++)
                 {
                     if (collisions[j].gameObject.tag == "Enemy") collisions[j].gameObject.GetComponent<Enemy>().setCondition(Condition.Frozen, 3f);
                 }
             }
         }
+        //Flash Freeze
+        else if (preparedSpell.name == SpellName.FireBlast)
+        {
+            //Animate
+            animator.SetInteger("Spell", 1);
+            animator.SetTrigger("Cast");
 
+            for (int i = 0; i < affectedArea.Length; i++)
+            {
+                //Set Up Effect in Tile
+                int verticalCell = Mathf.FloorToInt(affectedArea[i].y + 3.75f) + 1;
+                int horizontalCell = Mathf.FloorToInt(affectedArea[i].x + 8.25f) + 1;
+                scenario.transform.GetChild((verticalCell * 18) + horizontalCell).gameObject.GetComponent<TileEffectController>().setEffect(preparedSpell);
+                Debug.Log(affectedArea[i] + " - " + ((verticalCell * 18) + horizontalCell));
+
+                //Check for Affected Enemies
+                Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea[i], Vector2.one, 0f);
+                for (int j = 0; j < collisions.Length; j++)
+                {
+                    if (collisions[j].gameObject.tag == "Enemy") collisions[j].gameObject.GetComponent<Enemy>().takeDamage(preparedSpell.damage);
+                }
+            }
+        }
+
+           
         //Reset Prepared Spell
         preparedSpell = null;
 
@@ -125,7 +140,7 @@ public class Player : MonoBehaviour
             mouseChanger.changeMouse(preparedSpell, hasMana);
 
             //Set Spell Range Overlay
-            setSpellRangeOverlay();
+            spellRangeOverlay.setSpellOverlay(preparedSpell.areaType, preparedSpell.spellRange, Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
             //Check Mouse Click & Check if You have Enough Mana
             if (Input.GetMouseButtonDown(0) && hasMana) castSpell();

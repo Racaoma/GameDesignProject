@@ -7,7 +7,10 @@ public enum SpellName
     None,
     FlashFreeze,
     FireBlast,
-    LightningStrike
+    LightningStrike,
+    Hurricane,
+    SummonBeasts,
+    MeteorShower
 };
 
 public enum SpellAreaType
@@ -24,14 +27,16 @@ public class Spell
     public SpellAreaType areaType;
     public int spellRange;
     public int manaCost;
+    public int damage;
     public bool[] spellRune;
 
-    public Spell(SpellName name, SpellAreaType areaType, int spellRange, int manaCost, bool[] spellRune)
+    public Spell(SpellName name, SpellAreaType areaType, int spellRange, int manaCost, int damage, bool[] spellRune)
     {
         this.name = name;
         this.areaType = areaType;
         this.spellRune = spellRune;
         this.manaCost = manaCost;
+        this.damage = damage;
         this.spellRange = spellRange;
     }
 }

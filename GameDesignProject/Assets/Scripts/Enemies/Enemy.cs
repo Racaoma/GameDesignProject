@@ -47,6 +47,13 @@ public class Enemy : MonoBehaviour
         if (onDeathAction != null) onDeathAction(this.gameObject);
     }
 
+    //Take Damage
+    public void takeDamage(int value)
+    {
+        hitPoints -= value;
+        if (hitPoints <= 0) killEnemy();
+    }
+
     //Enemy Arrived at Destination
     public void retireEnemy()
     {
@@ -94,25 +101,20 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Check if Dead
-        if (hitPoints == 0) killEnemy();
-        else
+        //Update Conditions
+        if (currentCondition != Condition.None)
         {
-            //Update Conditions
-            if (currentCondition != Condition.None)
-            {
-                if (remainingConditionTime <= 0f) clearConditions();
-                else remainingConditionTime -= Time.deltaTime;
-            }
+            if (remainingConditionTime <= 0f) clearConditions();
+            else remainingConditionTime -= Time.deltaTime;
+        }
 
-            //Check Movement Impairing Conditions
-            if(currentCondition != Condition.Frozen && currentCondition != Condition.Stunned)
-            {
-                //Move!
-                Vector2 target = new Vector2(-9.5f, this.transform.position.y);
-                if (((Vector2)this.transform.position - target) == Vector2.zero) retireEnemy();
-                else this.transform.position = Vector2.MoveTowards(this.transform.position, target, speed * Time.deltaTime);
-            }
+        //Check Movement Impairing Conditions
+        if(currentCondition != Condition.Frozen && currentCondition != Condition.Stunned)
+        {
+            //Move!
+            Vector2 target = new Vector2(-9.5f, this.transform.position.y);
+            if (((Vector2)this.transform.position - target) == Vector2.zero) retireEnemy();
+            else this.transform.position = Vector2.MoveTowards(this.transform.position, target, speed * Time.deltaTime);
         }
     }
 }
