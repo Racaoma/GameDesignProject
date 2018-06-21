@@ -14,10 +14,15 @@ public enum Condition
 public class Enemy : MonoBehaviour
 {
     //Variables
-    public int hitPoints;
+    public int maxHitPoints;
     public float speed;
     public int spawnCost;
     public Action<GameObject> onDeathAction;
+
+    //Damage Control
+    private int currentHitPoints;
+    private float damageGrace;
+    private SpellName lastDamageSource;
 
     //Conditions Animator & Sprite Renderer Reference
     public Animator conditionAnimator;
@@ -33,25 +38,39 @@ public class Enemy : MonoBehaviour
     //Start Method
     private void Start()
     {
-        currentCondition = Condition.None;
+        resetInternalVariables();
         GameObject child = this.transform.GetChild(0).gameObject;
         conditionAnimator = child.GetComponent<Animator>();
         conditionSpriteRenderer = child.GetComponent<SpriteRenderer>();
     }
 
+    //Reset Internal Variables Method
+    private void resetInternalVariables()
+    {
+        currentHitPoints = maxHitPoints;
+        lastDamageSource = SpellName.None;
+        damageGrace = 0f;
+        currentCondition = Condition.None;
+    }
+
     //Kill Enemy
     public void killEnemy()
     {
-        currentCondition = Condition.None;
+        resetInternalVariables();
         this.transform.position = Vector2.zero;
         if (onDeathAction != null) onDeathAction(this.gameObject);
     }
 
     //Take Damage
-    public void takeDamage(int value)
+    public void takeDamage(Spell spell)
     {
-        hitPoints -= value;
-        if (hitPoints <= 0) killEnemy();
+        if(lastDamageSource != spell.name)
+        {
+            damageGrace = 1f;
+            lastDamageSource = spell.name;
+            currentHitPoints -= spell.damage;
+            if (currentHitPoints <= 0) killEnemy();
+        }
     }
 
     //Enemy Arrived at Destination
@@ -85,7 +104,6 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-
         //Change Animation
         conditionAnimator.runtimeAnimatorController = frozenAnimation;
     }
@@ -106,6 +124,13 @@ public class Enemy : MonoBehaviour
         {
             if (remainingConditionTime <= 0f) clearConditions();
             else remainingConditionTime -= Time.deltaTime;
+        }
+
+        //Update Damage Grace
+        if(damageGrace > 0f)
+        {
+            damageGrace -= Time.deltaTime;
+            if (damageGrace <= 0f) lastDamageSource = SpellName.None;
         }
 
         //Check Movement Impairing Conditions

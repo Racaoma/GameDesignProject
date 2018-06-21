@@ -7,8 +7,7 @@ public class Player : MonoBehaviour
     //References
     public GameObject castRunes;
     public SpellRangeOverlay spellRangeOverlay;
-    public CursorChangerController mouseChanger;
-    public GameObject scenario;
+    public ControllerManager controllerManager;
 
     //Internal References
     private Animator animator;
@@ -49,8 +48,8 @@ public class Player : MonoBehaviour
     //Start Method
     private void Start()
     {
-        animator = this.GetComponent<Animator>();
         preparedSpell = null;
+        animator = this.GetComponent<Animator>();
     }
 
     //Prepare Spell
@@ -64,6 +63,7 @@ public class Player : MonoBehaviour
     {
         preparedSpell = null;
         castRunes.SetActive(true);
+        spellRangeOverlay.disableSpellOverlay();
     }
 
     //Cast Spell Logic
@@ -84,14 +84,14 @@ public class Player : MonoBehaviour
 
             for (int i = 0; i < affectedArea.Length; i++)
             {
-                Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea[i], Vector2.one, 0f);
+                Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea[i], new Vector2(0.95f, 0.95f), 0f);
                 for (int j = 0; j < collisions.Length; j++)
                 {
                     if (collisions[j].gameObject.tag == "Enemy") collisions[j].gameObject.GetComponent<Enemy>().setCondition(Condition.Frozen, 3f);
                 }
             }
         }
-        //Flash Freeze
+        //Fire Blast
         else if (preparedSpell.name == SpellName.FireBlast)
         {
             //Animate
@@ -100,17 +100,16 @@ public class Player : MonoBehaviour
 
             for (int i = 0; i < affectedArea.Length; i++)
             {
-                //Set Up Effect in Tile
-                int verticalCell = Mathf.FloorToInt(affectedArea[i].y + 3.75f) + 1;
-                int horizontalCell = Mathf.FloorToInt(affectedArea[i].x + 8.25f) + 1;
-                scenario.transform.GetChild((verticalCell * 18) + horizontalCell).gameObject.GetComponent<TileEffectController>().setEffect(preparedSpell);
-                Debug.Log(affectedArea[i] + " - " + ((verticalCell * 18) + horizontalCell));
+                if (affectedArea[i] == (Vector2) this.transform.position) continue;
+
+                //Spawn Fire
+                controllerManager.getSpellEffectController().spawnEffect(preparedSpell, affectedArea[i]);
 
                 //Check for Affected Enemies
-                Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea[i], Vector2.one, 0f);
+                Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea[i], new Vector2(0.95f, 0.95f), 0f);
                 for (int j = 0; j < collisions.Length; j++)
                 {
-                    if (collisions[j].gameObject.tag == "Enemy") collisions[j].gameObject.GetComponent<Enemy>().takeDamage(preparedSpell.damage);
+                    if (collisions[j].gameObject.tag == "Enemy") collisions[j].gameObject.GetComponent<Enemy>().takeDamage(preparedSpell);
                 }
             }
         }
@@ -123,7 +122,7 @@ public class Player : MonoBehaviour
         spellRangeOverlay.disableSpellOverlay();
 
         //Reset Cursor
-        mouseChanger.resetMouse();
+        controllerManager.getCursorChangerController().resetMouse();
     }
 
     //Update Method
@@ -137,7 +136,7 @@ public class Player : MonoBehaviour
             bool hasMana = ManaController.Instance.getCurrentMana() >= preparedSpell.manaCost;
 
             //Update Cursor
-            mouseChanger.changeMouse(preparedSpell, hasMana);
+            controllerManager.getCursorChangerController().changeMouse(preparedSpell, hasMana);
 
             //Set Spell Range Overlay
             spellRangeOverlay.setSpellOverlay(preparedSpell.areaType, preparedSpell.spellRange, Camera.main.ScreenToWorldPoint(Input.mousePosition));

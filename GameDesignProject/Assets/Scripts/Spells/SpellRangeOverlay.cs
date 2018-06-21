@@ -12,29 +12,34 @@ public class SpellRangeOverlay : MonoBehaviour
     private LinkedList<GameObject> activeOverlays;
 
     //Current Spell Center
-    private Vector2 currentSpellCenter = Vector2.negativeInfinity;
+    private Vector2 currentSpellCenter;
 
     //Start Method
     private void Start()
     {
         activeOverlays = new LinkedList<GameObject>();
+        currentSpellCenter = Vector2.negativeInfinity;
     }
 
     //Enable Spell Overlay Method
     public void setSpellOverlay(SpellAreaType areaType, int size, Vector2 center)
     {
-        //If Mouse hasn't moved, do nothing
-        if (center == currentSpellCenter) return;
-
         //Check if Inside Bounds (Bounds X-Axis fixed by Camera)
-        if (center.y > -5f && center.y < 4f)
+        if (center.y > -5f && center.y < 4f && center.x > -8.5f && center.x < 8.5f)
         {
+            //Get Cell Number
+            int horizontalCell = ((int)(center.x + 9f));
+            int verticalCell = ((int)(center.y + 5f));
+
+            //Setup Center
+            center = new Vector2(horizontalCell, verticalCell);
+
+            //Check Spell Center
+            if (center == currentSpellCenter) return;
+            else currentSpellCenter = center;
+
             //Reset Spell Overlay
             resetSpellOverlay();
-
-            //Get Cell Number
-            int verticalCell = Mathf.FloorToInt(center.y + 3.75f) + 1;
-            int horizontalCell = Mathf.FloorToInt(center.x + 8.25f) + 1;
 
             //Check Area Type
             if (areaType == SpellAreaType.Square)
@@ -47,10 +52,9 @@ public class SpellRangeOverlay : MonoBehaviour
                 GameObject obj = this.transform.GetChild((verticalCell * width) + horizontalCell).gameObject;
                 obj.SetActive(true);
                 activeOverlays.AddLast(obj);
-                currentSpellCenter = center;
 
                 //Make Cross
-                for (int i = 0; i < size; i++)
+                for (int i = 1; i < size; i++)
                 {
                     //UP
                     if(insideArea(verticalCell+i, horizontalCell))
@@ -128,14 +132,12 @@ public class SpellRangeOverlay : MonoBehaviour
     public Vector2[] getAffectedArea()
     {
         Vector2[] affectedArea = new Vector2[activeOverlays.Count];
-        LinkedListNode<GameObject> curNode = activeOverlays.First;
         int index = 0;
 
         //Iterate Linked List
-        while(curNode != activeOverlays.Last)
+        foreach(GameObject obj in activeOverlays)
         {
-            affectedArea[index] = curNode.Value.transform.position;
-            curNode = curNode.Next;
+            affectedArea[index] = obj.transform.position;
             index++;
         }
 
@@ -156,8 +158,8 @@ public class SpellRangeOverlay : MonoBehaviour
         //Reset Active Cells
         while(activeOverlays.Count > 0)
         {
-            activeOverlays.First.Value.SetActive(false);
-            activeOverlays.RemoveFirst();
+            activeOverlays.Last.Value.SetActive(false);
+            activeOverlays.RemoveLast();
         }
     }
 }
