@@ -73,9 +73,9 @@ public class Player : MonoBehaviour
         Vector2[] affectedArea = spellRangeOverlay.getAffectedArea();
 
         //Spend Mana
-        ManaController.Instance.spendMana(preparedSpell.manaCost);
+        controllerManager.getManaController().spendMana(preparedSpell.manaCost);
 
-        //Flash Freeze
+        //Spell Logic
         if (preparedSpell.name == SpellName.FlashFreeze)
         {
             //Animate
@@ -87,11 +87,10 @@ public class Player : MonoBehaviour
                 Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea[i], new Vector2(0.95f, 0.95f), 0f);
                 for (int j = 0; j < collisions.Length; j++)
                 {
-                    if (collisions[j].gameObject.tag == "Enemy") collisions[j].gameObject.GetComponent<Enemy>().setCondition(Condition.Frozen, 3f);
+                    if (collisions[j].gameObject.tag == "Enemy") collisions[j].gameObject.GetComponent<Enemy>().setCondition(Condition.Frozen, 5f);
                 }
             }
         }
-        //Fire Blast
         else if (preparedSpell.name == SpellName.FireBlast)
         {
             //Animate
@@ -113,7 +112,15 @@ public class Player : MonoBehaviour
                 }
             }
         }
+        else if(preparedSpell.name == SpellName.Hurricane)
+        {
+            //Animate
+            animator.SetInteger("Spell", 3);
+            animator.SetTrigger("Cast");
 
+            //Spawn Hurricane
+            controllerManager.getSpellEffectController().spawnEffect(preparedSpell, new Vector2(affectedArea[0].x - 0.1f, affectedArea[0].y + 0.3f));
+        }
            
         //Reset Prepared Spell
         preparedSpell = null;
@@ -133,7 +140,7 @@ public class Player : MonoBehaviour
         else if(preparedSpell != null)
         {
             //Check Mana Levels
-            bool hasMana = ManaController.Instance.getCurrentMana() >= preparedSpell.manaCost;
+            bool hasMana = controllerManager.getManaController().getCurrentMana() >= preparedSpell.manaCost;
 
             //Update Cursor
             controllerManager.getCursorChangerController().changeMouse(preparedSpell, hasMana);

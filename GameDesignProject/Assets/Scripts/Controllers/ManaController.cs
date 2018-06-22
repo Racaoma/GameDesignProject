@@ -13,36 +13,6 @@ public class ManaController : MonoBehaviour
     public float manaRechargeRate;
     private float currentMana;
 
-    //Singleton Instance Variable
-    private static ManaController instance;
-    public static ManaController Instance
-    {
-        get
-        {
-            return instance;
-        }
-    }
-
-    //On Object Awake
-    private void Awake()
-    {
-        //Check Singleton
-        if (instance != null && instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            instance = this;
-        }
-    }
-
-    //On Object Destroy (Safeguard)
-    public void OnDestroy()
-    {
-        instance = null;
-    }
-
     //Start Method
     private void Start()
     {

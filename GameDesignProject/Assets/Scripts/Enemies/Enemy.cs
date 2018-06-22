@@ -2,18 +2,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum Condition
 {
     None,
     Stunned,
     Frozen,
-    Ablaze
+    Ablaze,
+    Slowed
 }
 
 public class Enemy : MonoBehaviour
 {
     //Variables
+    public Image healthBar;
     public int maxHitPoints;
     public float speed;
     public int spawnCost;
@@ -47,6 +50,7 @@ public class Enemy : MonoBehaviour
     //Reset Internal Variables Method
     private void resetInternalVariables()
     {
+        healthBar.fillAmount = 1f;
         currentHitPoints = maxHitPoints;
         lastDamageSource = SpellName.None;
         damageGrace = 0f;
@@ -69,6 +73,7 @@ public class Enemy : MonoBehaviour
             damageGrace = 1f;
             lastDamageSource = spell.name;
             currentHitPoints -= spell.damage;
+            healthBar.fillAmount = (float) currentHitPoints / (float) maxHitPoints;
             if (currentHitPoints <= 0) killEnemy();
         }
     }
@@ -93,6 +98,7 @@ public class Enemy : MonoBehaviour
         currentCondition = condition;
         remainingConditionTime = time;
 
+        //Change Animation
         switch (condition)
         {
             case Condition.Frozen:
@@ -103,9 +109,6 @@ public class Enemy : MonoBehaviour
             case Condition.Ablaze:
                 break;
         }
-
-        //Change Animation
-        conditionAnimator.runtimeAnimatorController = frozenAnimation;
     }
 
     //Clear Conditions Method
@@ -134,12 +137,13 @@ public class Enemy : MonoBehaviour
         }
 
         //Check Movement Impairing Conditions
-        if(currentCondition != Condition.Frozen && currentCondition != Condition.Stunned)
-        {
-            //Move!
-            Vector2 target = new Vector2(-9.5f, this.transform.position.y);
-            if (((Vector2)this.transform.position - target) == Vector2.zero) retireEnemy();
-            else this.transform.position = Vector2.MoveTowards(this.transform.position, target, speed * Time.deltaTime);
-        }
+        float targetSpeed = speed;
+        if (currentCondition == Condition.Frozen && currentCondition == Condition.Stunned) return;
+        else if (currentCondition == Condition.Slowed) targetSpeed *= 0.5f;
+
+        //Move!
+        Vector2 target = new Vector2(-9.5f, this.transform.position.y);
+        if (((Vector2)this.transform.position - target) == Vector2.zero) retireEnemy();
+        else this.transform.position = Vector2.MoveTowards(this.transform.position, target, targetSpeed * Time.deltaTime);
     }
 }
