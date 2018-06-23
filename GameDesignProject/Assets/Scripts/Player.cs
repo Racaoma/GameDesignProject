@@ -96,6 +96,7 @@ public class Player : MonoBehaviour
             //Animate
             animator.SetInteger("Spell", 1);
             animator.SetTrigger("Cast");
+            controllerManager.getScreenShakeController().screenShake(0.1f, 0.2f);
 
             for (int i = 0; i < affectedArea.Length; i++)
             {
@@ -141,6 +142,9 @@ public class Player : MonoBehaviour
         {
             //Check Mana Levels
             bool hasMana = controllerManager.getManaController().getCurrentMana() >= preparedSpell.manaCost;
+
+            //Update Text Ballon
+            controllerManager.getTextBalloonController().hasMana = hasMana;
 
             //Update Cursor
             controllerManager.getCursorChangerController().changeMouse(preparedSpell, hasMana);
