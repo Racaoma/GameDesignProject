@@ -7,10 +7,11 @@ public class Player : MonoBehaviour
     //References
     public GameObject castRunes;
     public SpellRangeOverlay spellRangeOverlay;
-    public ControllerManager controllerManager;
 
     //Internal References
     private Animator animator;
+    private GameObject textBalloon;
+    private GameObject alert;
 
     //Prepared Spell
     private Spell preparedSpell;
@@ -50,6 +51,8 @@ public class Player : MonoBehaviour
     {
         preparedSpell = null;
         animator = this.GetComponent<Animator>();
+        textBalloon = this.transform.GetChild(0).gameObject;
+        alert = this.transform.GetChild(1).gameObject;
     }
 
     //Prepare Spell
@@ -73,7 +76,10 @@ public class Player : MonoBehaviour
         Vector2[] affectedArea = spellRangeOverlay.getAffectedArea();
 
         //Spend Mana
-        controllerManager.getManaController().spendMana(preparedSpell.manaCost);
+        ControllerManager.Instance.getManaController().spendMana(preparedSpell.manaCost);
+
+        //Remove Text Balloon
+        textBalloon.SetActive(false);
 
         //Spell Logic
         if (preparedSpell.name == SpellName.FlashFreeze)
@@ -96,14 +102,14 @@ public class Player : MonoBehaviour
             //Animate
             animator.SetInteger("Spell", 1);
             animator.SetTrigger("Cast");
-            controllerManager.getScreenShakeController().screenShake(0.1f, 0.2f);
+            ControllerManager.Instance.getScreenShakeController().screenShake(0.1f, 0.2f);
 
             for (int i = 0; i < affectedArea.Length; i++)
             {
                 if (affectedArea[i] == (Vector2) this.transform.position) continue;
 
                 //Spawn Fire
-                controllerManager.getSpellEffectController().spawnEffect(preparedSpell, affectedArea[i]);
+                ControllerManager.Instance.getSpellEffectController().spawnEffect(preparedSpell, affectedArea[i]);
 
                 //Check for Affected Enemies
                 Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea[i], new Vector2(0.95f, 0.95f), 0f);
@@ -120,7 +126,7 @@ public class Player : MonoBehaviour
             animator.SetTrigger("Cast");
 
             //Spawn Hurricane
-            controllerManager.getSpellEffectController().spawnEffect(preparedSpell, new Vector2(affectedArea[0].x - 0.1f, affectedArea[0].y + 0.3f));
+            ControllerManager.Instance.getSpellEffectController().spawnEffect(preparedSpell, new Vector2(affectedArea[0].x - 0.1f, affectedArea[0].y + 0.3f));
         }
            
         //Reset Prepared Spell
@@ -130,7 +136,25 @@ public class Player : MonoBehaviour
         spellRangeOverlay.disableSpellOverlay();
 
         //Reset Cursor
-        controllerManager.getCursorChangerController().resetMouse();
+        ControllerManager.Instance.getCursorChangerController().resetMouse();
+    }
+
+    //Fixed Update
+    private void FixedUpdate()
+    {
+        bool enemyInRange = false;
+        RaycastHit2D[] hit = Physics2D.RaycastAll(new Vector2(this.transform.position.x + 0.51f, this.transform.position.y), Vector2.right, 3f);
+        for (int i = 0; i < hit.Length; i++)
+        {
+            if (hit[i].transform.gameObject.tag == "Enemy")
+            {
+                enemyInRange = true;
+                if (hit[i].distance < 1f) ControllerManager.Instance.getDevourerController().activateDevourer();
+            }
+        }
+
+        //Setup Alert
+        alert.SetActive(enemyInRange);
     }
 
     //Update Method
@@ -141,13 +165,13 @@ public class Player : MonoBehaviour
         else if(preparedSpell != null)
         {
             //Check Mana Levels
-            bool hasMana = controllerManager.getManaController().getCurrentMana() >= preparedSpell.manaCost;
+            bool hasMana = ControllerManager.Instance.getManaController().getCurrentMana() >= preparedSpell.manaCost;
 
             //Update Text Ballon
-            controllerManager.getTextBalloonController().hasMana = hasMana;
+            textBalloon.SetActive(!hasMana);
 
             //Update Cursor
-            controllerManager.getCursorChangerController().changeMouse(preparedSpell, hasMana);
+            ControllerManager.Instance.getCursorChangerController().changeMouse(preparedSpell, hasMana);
 
             //Set Spell Range Overlay
             spellRangeOverlay.setSpellOverlay(preparedSpell.areaType, preparedSpell.spellRange, Camera.main.ScreenToWorldPoint(Input.mousePosition));

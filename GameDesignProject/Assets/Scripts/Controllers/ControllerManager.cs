@@ -9,7 +9,37 @@ public class ControllerManager : MonoBehaviour
     private SpellEffectController spellEffectController;
     private ManaController manaController;
     private ScreenShakeController screenShakeController;
-    private TextBalloonController textBalloonController;
+    private DevourerController devourerController;
+
+    //Singleton Instance Variable
+    private static ControllerManager instance;
+    public static ControllerManager Instance
+    {
+        get
+        {
+            return instance;
+        }
+    }
+
+    //On Object Awake
+    private void Awake()
+    {
+        //Check Singleton
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+    }
+
+    //On Object Destroy (Safeguard)
+    public void OnDestroy()
+    {
+        instance = null;
+    }
 
     //Start Method
     private void Start()
@@ -18,7 +48,7 @@ public class ControllerManager : MonoBehaviour
         spellEffectController = this.GetComponent<SpellEffectController>();
         manaController = this.GetComponent<ManaController>();
         screenShakeController = this.GetComponent<ScreenShakeController>();
-        textBalloonController = this.GetComponent<TextBalloonController>();
+        devourerController = this.GetComponent<DevourerController>();
     }
 
     //Get Methods
@@ -42,8 +72,8 @@ public class ControllerManager : MonoBehaviour
         return screenShakeController;
     }
 
-    public TextBalloonController getTextBalloonController()
+    public DevourerController getDevourerController()
     {
-        return textBalloonController;
+        return devourerController;
     }
 }

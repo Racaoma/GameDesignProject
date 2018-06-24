@@ -23,7 +23,7 @@ public class Hurricane : MonoBehaviour
         hurricaneSpellRef = SpellDatabase.hurricaneSpell;
         currentIntervalPoint = 0f;
         remainingDuration = duration;
-        pivotCenter = new Vector2(this.transform.position.x + 0.1f, this.transform.position.y - 0.3f);
+        pivotCenter = this.transform.GetChild(0).transform.position;
     }
 
     //Update Method
