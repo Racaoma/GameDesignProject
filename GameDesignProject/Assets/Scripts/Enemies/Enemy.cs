@@ -21,6 +21,7 @@ public class Enemy : MonoBehaviour
     public float speed;
     public int spawnCost;
     public Action<GameObject> onDeathAction;
+    private Vector2 target;
 
     //Damage Control
     private int currentHitPoints;
@@ -45,6 +46,12 @@ public class Enemy : MonoBehaviour
         GameObject child = this.transform.GetChild(0).gameObject;
         conditionAnimator = child.GetComponent<Animator>();
         conditionSpriteRenderer = child.GetComponent<SpriteRenderer>();
+    }
+
+    //On Enable Method
+    private void OnEnable()
+    {
+        target = new Vector2(-9.5f, this.transform.position.y);
     }
 
     //Reset Internal Variables Method
@@ -142,8 +149,21 @@ public class Enemy : MonoBehaviour
         else if (currentCondition == Condition.Slowed) targetSpeed *= 0.5f;
 
         //Move!
-        Vector2 target = new Vector2(-9.5f, this.transform.position.y);
         if (((Vector2)this.transform.position - target) == Vector2.zero) retireEnemy();
-        else this.transform.position = Vector2.MoveTowards(this.transform.position, target, targetSpeed * Time.deltaTime);
+        else
+        {
+            //Get Desired Movement Position
+            Vector2 positionAfterMovement = Vector2.MoveTowards(this.transform.position, target, targetSpeed * Time.deltaTime);
+
+            //Check for Collisions
+            Collider2D[] collisions = Physics2D.OverlapBoxAll(positionAfterMovement, Vector2.one, 0f);
+            for (int j = 0; j < collisions.Length; j++)
+            {
+                if ((collisions[j].gameObject != this.gameObject) && (collisions[j].gameObject.tag == "Enemy")) return;
+            }
+
+            //Finally...
+            this.transform.position = positionAfterMovement;
+        }
     }
 }

@@ -10,6 +10,7 @@ public class ControllerManager : MonoBehaviour
     private ManaController manaController;
     private ScreenShakeController screenShakeController;
     private DevourerController devourerController;
+    private ScreenFlashController screenFlashController;
 
     //Singleton Instance Variable
     private static ControllerManager instance;
@@ -49,6 +50,7 @@ public class ControllerManager : MonoBehaviour
         manaController = this.GetComponent<ManaController>();
         screenShakeController = this.GetComponent<ScreenShakeController>();
         devourerController = this.GetComponent<DevourerController>();
+        screenFlashController = this.GetComponent<ScreenFlashController>();
     }
 
     //Get Methods
@@ -75,5 +77,10 @@ public class ControllerManager : MonoBehaviour
     public DevourerController getDevourerController()
     {
         return devourerController;
+    }
+
+    public ScreenFlashController getScreenFlashController()
+    {
+        return screenFlashController;
     }
 }

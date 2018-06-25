@@ -65,8 +65,8 @@ public class Player : MonoBehaviour
     private void OnMouseDown()
     {
         preparedSpell = null;
-        castRunes.SetActive(true);
         spellRangeOverlay.disableSpellOverlay();
+        castRunes.SetActive(true);
     }
 
     //Cast Spell Logic
@@ -106,7 +106,7 @@ public class Player : MonoBehaviour
 
             for (int i = 0; i < affectedArea.Length; i++)
             {
-                if (affectedArea[i] == (Vector2) this.transform.position) continue;
+                if (affectedArea[i] == (Vector2)this.transform.position) continue;
 
                 //Spawn Fire
                 ControllerManager.Instance.getSpellEffectController().spawnEffect(preparedSpell, affectedArea[i]);
@@ -119,7 +119,27 @@ public class Player : MonoBehaviour
                 }
             }
         }
-        else if(preparedSpell.name == SpellName.Hurricane)
+        else if (preparedSpell.name == SpellName.LightningStrike)
+        {
+            //Animate
+            animator.SetInteger("Spell", 1);
+            animator.SetTrigger("Cast");
+
+            //Juicyness
+            ControllerManager.Instance.getScreenShakeController().screenShake(0.3f, 0.5f);
+            ControllerManager.Instance.getScreenFlashController().flashScreen(0.8f);
+
+            //Spawn Lightning
+            ControllerManager.Instance.getSpellEffectController().spawnEffect(preparedSpell, affectedArea[0]);
+
+            //Check for Affected Enemies
+            Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea[0], new Vector2(0.95f, 0.95f), 0f);
+            for (int j = 0; j < collisions.Length; j++)
+            {
+                if (collisions[j].gameObject.tag == "Enemy") collisions[j].gameObject.GetComponent<Enemy>().takeDamage(preparedSpell);
+            }
+        }
+        else if (preparedSpell.name == SpellName.Hurricane)
         {
             //Animate
             animator.SetInteger("Spell", 3);
@@ -149,7 +169,13 @@ public class Player : MonoBehaviour
             if (hit[i].transform.gameObject.tag == "Enemy")
             {
                 enemyInRange = true;
-                if (hit[i].distance < 1f) ControllerManager.Instance.getDevourerController().activateDevourer();
+                if (hit[i].distance < 1f)
+                {
+                    preparedSpell = null;
+                    spellRangeOverlay.disableSpellOverlay();
+                    ControllerManager.Instance.getDevourerController().activateDevourer();
+                    ControllerManager.Instance.getManaController().spendMana(ControllerManager.Instance.getManaController().getCurrentMana());
+                }
             }
         }
 
