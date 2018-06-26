@@ -61,7 +61,7 @@ public class Enemy : MonoBehaviour
         currentHitPoints = maxHitPoints;
         lastDamageSource = SpellName.None;
         damageGrace = 0f;
-        currentCondition = Condition.None;
+        clearConditions();
     }
 
     //Kill Enemy
@@ -145,25 +145,33 @@ public class Enemy : MonoBehaviour
 
         //Check Movement Impairing Conditions
         float targetSpeed = speed;
-        if (currentCondition == Condition.Frozen && currentCondition == Condition.Stunned) return;
-        else if (currentCondition == Condition.Slowed) targetSpeed *= 0.5f;
-
-        //Move!
-        if (((Vector2)this.transform.position - target) == Vector2.zero) retireEnemy();
-        else
+        if (currentCondition != Condition.Frozen && currentCondition != Condition.Stunned)
         {
-            //Get Desired Movement Position
-            Vector2 positionAfterMovement = Vector2.MoveTowards(this.transform.position, target, targetSpeed * Time.deltaTime);
+            //Check Slowed Conditions
+            if (currentCondition == Condition.Slowed) targetSpeed *= 0.5f;
 
-            //Check for Collisions
-            Collider2D[] collisions = Physics2D.OverlapBoxAll(positionAfterMovement, Vector2.one, 0f);
-            for (int j = 0; j < collisions.Length; j++)
+            //Move!
+            if (((Vector2)this.transform.position - target) == Vector2.zero) retireEnemy();
+            else
             {
-                if ((collisions[j].gameObject != this.gameObject) && (collisions[j].gameObject.tag == "Enemy")) return;
-            }
+                //Get Desired Movement Position
+                Vector2 positionAfterMovement = Vector2.MoveTowards(this.transform.position, target, targetSpeed * Time.deltaTime);
 
-            //Finally...
-            this.transform.position = positionAfterMovement;
+                //Check for Collisions
+                bool canMove = true;
+                Collider2D[] collisions = Physics2D.OverlapBoxAll(positionAfterMovement, Vector2.one, 0f);
+                for (int j = 0; j < collisions.Length; j++)
+                {
+                    if ((collisions[j].gameObject != this.gameObject) && (collisions[j].gameObject.tag == "Enemy"))
+                    {
+                        canMove = false;
+                        break;
+                    }
+                }
+
+                //Finally...
+               if(canMove) this.transform.position = positionAfterMovement;
+            }
         }
     }
 }

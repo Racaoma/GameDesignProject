@@ -21,7 +21,7 @@ public class SpellEffectController : MonoBehaviour
                 Instantiate(lightning, new Vector2(position.x, position.y + 4.5f), Quaternion.identity);
                 break;
             case SpellName.Hurricane:
-                Instantiate(hurricane, position, Quaternion.identity);
+                Instantiate(hurricane, new Vector2(position.x, position.y + 1f), Quaternion.identity);
                 break;
         }
     }

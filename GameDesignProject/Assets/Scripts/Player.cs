@@ -61,11 +61,18 @@ public class Player : MonoBehaviour
         preparedSpell = spell;
     }
 
-    //On Mouse Click
-    private void OnMouseDown()
+    //Cancel Prepared Spell
+    private void resetPreparedSpell()
     {
         preparedSpell = null;
         spellRangeOverlay.disableSpellOverlay();
+        ControllerManager.Instance.getCursorChangerController().resetMouse();
+    }
+
+    //On Mouse Click
+    private void OnMouseDown()
+    {
+        resetPreparedSpell();
         castRunes.SetActive(true);
     }
 
@@ -171,8 +178,7 @@ public class Player : MonoBehaviour
                 enemyInRange = true;
                 if (hit[i].distance < 1f)
                 {
-                    preparedSpell = null;
-                    spellRangeOverlay.disableSpellOverlay();
+                    resetPreparedSpell();
                     ControllerManager.Instance.getDevourerController().activateDevourer();
                     ControllerManager.Instance.getManaController().spendMana(ControllerManager.Instance.getManaController().getCurrentMana());
                 }
