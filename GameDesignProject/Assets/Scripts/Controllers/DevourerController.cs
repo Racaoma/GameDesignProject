@@ -24,6 +24,12 @@ public class DevourerController : MonoBehaviour
         devourerAnimator = devourer.GetComponent<Animator>();
     }
 
+    //Check if Devourer is Active
+    public bool isActive()
+    {
+        return devourer.activeInHierarchy;
+    }
+
     //Activate Devourer
     public void activateDevourer()
     {

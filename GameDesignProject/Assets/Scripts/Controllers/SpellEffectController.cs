@@ -6,8 +6,9 @@ public class SpellEffectController : MonoBehaviour
 {
     //Spell Effects References
     public GameObject fireEffect;
-    public GameObject hurricane;
+    public GameObject tornado;
     public GameObject lightning;
+    public GameObject cleanseEffect;
 
     //Spawn Effect Method
     public void spawnEffect(Spell spell, Vector2 position)
@@ -20,8 +21,11 @@ public class SpellEffectController : MonoBehaviour
             case SpellName.LightningStrike:
                 Instantiate(lightning, new Vector2(position.x, position.y + 4.5f), Quaternion.identity);
                 break;
-            case SpellName.Hurricane:
-                Instantiate(hurricane, new Vector2(position.x, position.y + 1f), Quaternion.identity);
+            case SpellName.Tornado:
+                Instantiate(tornado, new Vector2(position.x, position.y + 1f), Quaternion.identity);
+                break;
+            case SpellName.Cleanse:
+                Instantiate(cleanseEffect, cleanseEffect.transform.position, Quaternion.identity);
                 break;
         }
     }

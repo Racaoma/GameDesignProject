@@ -88,7 +88,7 @@ public class Enemy : MonoBehaviour
     //Enemy Arrived at Destination
     public void retireEnemy()
     {
-        //TODO: reduce score/lifes
+        ControllerManager.Instance.getCorruptionController().gainCorruption(spawnCost);
         killEnemy();
     }
 

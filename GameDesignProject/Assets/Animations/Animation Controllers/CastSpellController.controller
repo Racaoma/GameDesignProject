@@ -327,7 +327,7 @@ AnimatorState:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: MageMeteorRain
+  m_Name: MageCleanse
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -353,7 +353,7 @@ AnimatorState:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: MageSummon
+  m_Name: MageSummonRain
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -379,7 +379,7 @@ AnimatorState:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: MageHurricane
+  m_Name: MageTornado
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:

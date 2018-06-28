@@ -273,7 +273,7 @@ public class CastRunes : MonoBehaviour
         }
 
         //Pass Results to Player
-        Player.Instance.prepareSpell(SpellDatabase.checkRune(activeSpheres));
+        Player.Instance.prepareNewSpell(SpellDatabase.checkRune(activeSpheres));
     }
 
     //Reset CastRunes Method

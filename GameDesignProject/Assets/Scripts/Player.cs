@@ -56,13 +56,13 @@ public class Player : MonoBehaviour
     }
 
     //Prepare Spell
-    public void prepareSpell(Spell spell)
+    public void prepareNewSpell(Spell spell)
     {
         preparedSpell = spell;
     }
 
     //Cancel Prepared Spell
-    private void resetPreparedSpell()
+    private void resetPreparedSpells()
     {
         preparedSpell = null;
         spellRangeOverlay.disableSpellOverlay();
@@ -72,7 +72,7 @@ public class Player : MonoBehaviour
     //On Mouse Click
     private void OnMouseDown()
     {
-        resetPreparedSpell();
+        spellRangeOverlay.disableSpellOverlay();
         castRunes.SetActive(true);
     }
 
@@ -146,7 +146,7 @@ public class Player : MonoBehaviour
                 if (collisions[j].gameObject.tag == "Enemy") collisions[j].gameObject.GetComponent<Enemy>().takeDamage(preparedSpell);
             }
         }
-        else if (preparedSpell.name == SpellName.Hurricane)
+        else if (preparedSpell.name == SpellName.Tornado)
         {
             //Animate
             animator.SetInteger("Spell", 3);
@@ -155,7 +155,19 @@ public class Player : MonoBehaviour
             //Spawn Hurricane
             ControllerManager.Instance.getSpellEffectController().spawnEffect(preparedSpell, new Vector2(affectedArea[0].x - 0.1f, affectedArea[0].y + 0.3f));
         }
-           
+        else if (preparedSpell.name == SpellName.Cleanse)
+        {
+            //Animate
+            animator.SetInteger("Spell", 5);
+            animator.SetTrigger("Cast");
+
+            //Spawn Effect
+            ControllerManager.Instance.getSpellEffectController().spawnEffect(preparedSpell, Vector2.zero);
+
+            //Heal!
+            ControllerManager.Instance.getCorruptionController().gainCorruption(-10);
+        }
+
         //Reset Prepared Spell
         preparedSpell = null;
 
@@ -176,9 +188,10 @@ public class Player : MonoBehaviour
             if (hit[i].transform.gameObject.tag == "Enemy")
             {
                 enemyInRange = true;
-                if (hit[i].distance < 1f)
+                if (hit[i].distance < 1f && !ControllerManager.Instance.getDevourerController().isActive())
                 {
-                    resetPreparedSpell();
+                    resetPreparedSpells();
+                    ControllerManager.Instance.getCorruptionController().gainCorruption(20);
                     ControllerManager.Instance.getDevourerController().activateDevourer();
                     ControllerManager.Instance.getManaController().spendMana(ControllerManager.Instance.getManaController().getCurrentMana());
                 }
@@ -194,7 +207,8 @@ public class Player : MonoBehaviour
     {
         //If Mouse is Released
         if (Input.GetMouseButtonUp(0) && castRunes.activeInHierarchy) castRunes.GetComponent<CastRunes>().disableCastRunes();
-        else if(preparedSpell != null)
+        else if (Input.GetMouseButtonDown(1)) resetPreparedSpells();
+        else if (preparedSpell != null)
         {
             //Check Mana Levels
             bool hasMana = ControllerManager.Instance.getManaController().getCurrentMana() >= preparedSpell.manaCost;
@@ -206,7 +220,7 @@ public class Player : MonoBehaviour
             ControllerManager.Instance.getCursorChangerController().changeMouse(preparedSpell, hasMana);
 
             //Set Spell Range Overlay
-            spellRangeOverlay.setSpellOverlay(preparedSpell.areaType, preparedSpell.spellRange, Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            if (preparedSpell.areaType != SpellAreaType.All) spellRangeOverlay.setSpellOverlay(preparedSpell.areaType, preparedSpell.spellRange, Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
             //Check Mouse Click & Check if You have Enough Mana
             if (Input.GetMouseButtonDown(0) && hasMana) castSpell();

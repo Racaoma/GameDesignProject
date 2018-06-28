@@ -14,14 +14,14 @@ public class CursorChangerController : MonoBehaviour
     public Texture2D lightningStrikeCursor;
     public Texture2D lightningStrikeCursorNoMana;
 
-    public Texture2D hurricaneCursor;
-    public Texture2D hurricaneCursorNoMana;
+    public Texture2D tornadoCursor;
+    public Texture2D tornadoCursorNoMana;
 
-    public Texture2D summonBeastsCursor;
-    public Texture2D summonBeastsCursorNoMana;
+    public Texture2D summonRainCursor;
+    public Texture2D summonRainCursorNoMana;
 
-    public Texture2D meteorRainCursor;
-    public Texture2D meteorRainCursorNoMana;
+    public Texture2D cleanseCursor;
+    public Texture2D cleanseCursorNoMana;
 
     public void changeMouse(Spell spell, bool hasMana)
     {
@@ -40,16 +40,16 @@ public class CursorChangerController : MonoBehaviour
                 else Cursor.SetCursor(lightningStrikeCursorNoMana, Vector2.zero, CursorMode.Auto);
                 break;
             case SpellName.Hurricane:
-                if (hasMana) Cursor.SetCursor(hurricaneCursor, Vector2.zero, CursorMode.Auto);
-                else Cursor.SetCursor(hurricaneCursorNoMana, Vector2.zero, CursorMode.Auto);
+                if (hasMana) Cursor.SetCursor(tornadoCursor, Vector2.zero, CursorMode.Auto);
+                else Cursor.SetCursor(tornadoCursorNoMana, Vector2.zero, CursorMode.Auto);
                 break;
-            case SpellName.SummonBeasts:
-                if (hasMana) Cursor.SetCursor(summonBeastsCursor, Vector2.zero, CursorMode.Auto);
-                else Cursor.SetCursor(summonBeastsCursorNoMana, Vector2.zero, CursorMode.Auto);
+            case SpellName.SummonRain:
+                if (hasMana) Cursor.SetCursor(summonRainCursor, Vector2.zero, CursorMode.Auto);
+                else Cursor.SetCursor(summonRainCursorNoMana, Vector2.zero, CursorMode.Auto);
                 break;
-            case SpellName.MeteorShower:
-                if (hasMana) Cursor.SetCursor(meteorRainCursor, Vector2.zero, CursorMode.Auto);
-                else Cursor.SetCursor(meteorRainCursorNoMana, Vector2.zero, CursorMode.Auto);
+            case SpellName.Cleanse:
+                if (hasMana) Cursor.SetCursor(cleanseCursor, Vector2.zero, CursorMode.Auto);
+                else Cursor.SetCursor(cleanseCursorNoMana, Vector2.zero, CursorMode.Auto);
                 break;
         }
     }

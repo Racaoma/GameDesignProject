@@ -8,9 +8,26 @@ public enum SpellName
     FlashFreeze,
     FireBlast,
     LightningStrike,
+    Tornado,
+    SummonRain,
+    Cleanse,
+
+    //Improved Spells
+    DeepFreeze,
+    Hellfire,
+    ChainLightning,
     Hurricane,
-    SummonBeasts,
-    MeteorShower
+    Cloudburst,
+    Purify,
+
+    //Combo Spells
+    ThunderStorm, //Summon Rain + Lightning Strike
+    HailStorm, //Summon Rain + Flash Freeze
+    Superbolt, //Lightning Strike + Fire Blast
+    Typhoon, //Hurricane + Rain
+    SuperCell, //Hurricane + Lightning Strike
+    FireStorm, //Hurricane + Fire Blast
+    Blizzard //Hurricane + Flash Freeze
 };
 
 public enum SpellAreaType
@@ -18,7 +35,9 @@ public enum SpellAreaType
     Square,
     Circle,
     Cross,
-    Line
+    Line,
+    Random,
+    All
 };
 
 public class Spell
