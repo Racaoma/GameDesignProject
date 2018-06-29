@@ -10,7 +10,8 @@ public enum Condition
     Stunned,
     Frozen,
     Ablaze,
-    Slowed
+    Slowed,
+    Shocked
 }
 
 public class Enemy : MonoBehaviour
@@ -35,9 +36,7 @@ public class Enemy : MonoBehaviour
     //Conditions
     private Condition currentCondition;
     private float remainingConditionTime;
-
-    //Conditions Animations
-    public RuntimeAnimatorController frozenAnimation;
+    private float stunGrace;
 
     //Start Method
     private void Start()
@@ -61,6 +60,7 @@ public class Enemy : MonoBehaviour
         currentHitPoints = maxHitPoints;
         lastDamageSource = SpellName.None;
         damageGrace = 0f;
+        stunGrace = 0f;
         clearConditions();
     }
 
@@ -109,9 +109,13 @@ public class Enemy : MonoBehaviour
         switch (condition)
         {
             case Condition.Frozen:
-                conditionAnimator.runtimeAnimatorController = frozenAnimation;
+                conditionAnimator.runtimeAnimatorController = ControllerManager.Instance.getConditionController().frozenAnimation;
                 break;
             case Condition.Stunned:
+                conditionAnimator.runtimeAnimatorController = ControllerManager.Instance.getConditionController().stunnedAnimation;
+                break;
+            case Condition.Shocked:
+                conditionAnimator.runtimeAnimatorController = ControllerManager.Instance.getConditionController().shockedAnimation;
                 break;
             case Condition.Ablaze:
                 break;
@@ -121,6 +125,10 @@ public class Enemy : MonoBehaviour
     //Clear Conditions Method
     public void clearConditions()
     {
+        //Check for After-Effects
+        if (currentCondition == Condition.Frozen) ControllerManager.Instance.getEnvironmentController().setEnvironmentCondition(this.transform.position, EnvironmentCondition.Puddle);
+
+        //Reset Conditions
         currentCondition = Condition.None;
         conditionAnimator.runtimeAnimatorController = null;
         conditionSpriteRenderer.sprite = null;
@@ -129,6 +137,13 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Check if Enemy Has Arrive at Destination
+        if (((Vector2)this.transform.position - target) == Vector2.zero)
+        {
+            retireEnemy();
+            return;
+        }
+
         //Update Conditions
         if (currentCondition != Condition.None)
         {
@@ -136,8 +151,9 @@ public class Enemy : MonoBehaviour
             else remainingConditionTime -= Time.deltaTime;
         }
 
-        //Update Damage Grace
-        if(damageGrace > 0f)
+        //Update Damage & Condition Grace
+        if (stunGrace > 0f) stunGrace -= Time.deltaTime;
+        if (damageGrace > 0f)
         {
             damageGrace -= Time.deltaTime;
             if (damageGrace <= 0f) lastDamageSource = SpellName.None;
@@ -145,33 +161,48 @@ public class Enemy : MonoBehaviour
 
         //Check Movement Impairing Conditions
         float targetSpeed = speed;
-        if (currentCondition != Condition.Frozen && currentCondition != Condition.Stunned)
+        if (currentCondition != Condition.Frozen && currentCondition != Condition.Stunned && currentCondition != Condition.Shocked)
         {
+            //Check Environment
+            EnvironmentCondition condition = ControllerManager.Instance.getEnvironmentController().getEnvironmentCondition(this.transform.position);
+            if (condition == EnvironmentCondition.Ice && stunGrace == 0f)
+            {
+                setCondition(Condition.Stunned, ControllerManager.Instance.getConditionController().stunnedDuration);
+                stunGrace = ControllerManager.Instance.getConditionController().stunnedDuration + 2f;
+                return;
+            }
+            else if(condition == EnvironmentCondition.Shock)
+            {
+                setCondition(Condition.Shocked, ControllerManager.Instance.getConditionController().shockedDuration);
+                return;
+            }
+
             //Check Slowed Conditions
             if (currentCondition == Condition.Slowed) targetSpeed *= 0.5f;
 
-            //Move!
-            if (((Vector2)this.transform.position - target) == Vector2.zero) retireEnemy();
-            else
+            //Get Desired Movement Position
+            Vector2 positionAfterMovement = Vector2.MoveTowards(this.transform.position, target, targetSpeed * Time.deltaTime);
+
+            //Check for Collisions
+            bool canMove = true;
+            Collider2D[] collisions = Physics2D.OverlapBoxAll(positionAfterMovement, Vector2.one, 0f);
+            for (int j = 0; j < collisions.Length; j++)
             {
-                //Get Desired Movement Position
-                Vector2 positionAfterMovement = Vector2.MoveTowards(this.transform.position, target, targetSpeed * Time.deltaTime);
-
-                //Check for Collisions
-                bool canMove = true;
-                Collider2D[] collisions = Physics2D.OverlapBoxAll(positionAfterMovement, Vector2.one, 0f);
-                for (int j = 0; j < collisions.Length; j++)
+                if ((collisions[j].gameObject != this.gameObject) && (collisions[j].gameObject.CompareTag("Enemy")))
                 {
-                    if ((collisions[j].gameObject != this.gameObject) && (collisions[j].gameObject.tag == "Enemy"))
-                    {
-                        canMove = false;
-                        break;
-                    }
-                }
+                    //Check for Condition Propagation
+                    Condition collisionCondition = collisions[j].gameObject.GetComponent<Enemy>().currentCondition;
+                    if (collisionCondition == Condition.Ablaze) setCondition(Condition.Ablaze, ControllerManager.Instance.getConditionController().ablazeDuration);
+                    else if(collisionCondition == Condition.Shocked) setCondition(Condition.Shocked, ControllerManager.Instance.getConditionController().shockedDuration);
 
-                //Finally...
-               if(canMove) this.transform.position = positionAfterMovement;
+                    //Break
+                    canMove = false;
+                    break;
+                }
             }
+
+            //Finally... Move!
+            if (canMove) this.transform.position = positionAfterMovement;
         }
     }
 }

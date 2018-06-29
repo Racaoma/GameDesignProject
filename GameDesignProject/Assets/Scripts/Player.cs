@@ -97,10 +97,14 @@ public class Player : MonoBehaviour
 
             for (int i = 0; i < affectedArea.Length; i++)
             {
+                //Check for Puddles
+                ControllerManager.Instance.getEnvironmentController().setEnvironmentCondition(affectedArea[i], EnvironmentCondition.Ice);
+
+                //Check for Enemies
                 Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea[i], new Vector2(0.95f, 0.95f), 0f);
                 for (int j = 0; j < collisions.Length; j++)
                 {
-                    if (collisions[j].gameObject.tag == "Enemy") collisions[j].gameObject.GetComponent<Enemy>().setCondition(Condition.Frozen, 5f);
+                    if (collisions[j].gameObject.CompareTag("Enemy")) collisions[j].gameObject.GetComponent<Enemy>().setCondition(Condition.Frozen, ControllerManager.Instance.getConditionController().frozenDuration);
                 }
             }
         }
@@ -113,16 +117,20 @@ public class Player : MonoBehaviour
 
             for (int i = 0; i < affectedArea.Length; i++)
             {
+                //Check for Puddles
+                ControllerManager.Instance.getEnvironmentController().setEnvironmentCondition(affectedArea[i], EnvironmentCondition.Fire);
+
+                //If Area is Mage, Ignore
                 if (affectedArea[i] == (Vector2)this.transform.position) continue;
 
                 //Spawn Fire
-                ControllerManager.Instance.getSpellEffectController().spawnEffect(preparedSpell, affectedArea[i]);
+                ControllerManager.Instance.getSpellEffectController().spawnEffect(preparedSpell, affectedArea[i]);  
 
                 //Check for Affected Enemies
                 Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea[i], new Vector2(0.95f, 0.95f), 0f);
                 for (int j = 0; j < collisions.Length; j++)
                 {
-                    if (collisions[j].gameObject.tag == "Enemy") collisions[j].gameObject.GetComponent<Enemy>().takeDamage(preparedSpell);
+                    if (collisions[j].gameObject.CompareTag("Enemy")) collisions[j].gameObject.GetComponent<Enemy>().takeDamage(preparedSpell);
                 }
             }
         }
@@ -139,11 +147,22 @@ public class Player : MonoBehaviour
             //Spawn Lightning
             ControllerManager.Instance.getSpellEffectController().spawnEffect(preparedSpell, affectedArea[0]);
 
+            //Check for Puddles
+            EnvironmentCondition affectedTile = ControllerManager.Instance.getEnvironmentController().getEnvironmentCondition(affectedArea[0]);
+            if (affectedTile == EnvironmentCondition.Puddle || affectedTile == EnvironmentCondition.Shock)
+            {
+                Vector2[] affectedTiles = ControllerManager.Instance.getEnvironmentController().getConnectedPuddles(affectedArea[0]);
+                for(int i = 0; i < affectedTiles.Length; i++)
+                {
+                    ControllerManager.Instance.getEnvironmentController().setEnvironmentCondition(affectedTiles[i], EnvironmentCondition.Shock);
+                }
+            }
+
             //Check for Affected Enemies
             Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea[0], new Vector2(0.95f, 0.95f), 0f);
             for (int j = 0; j < collisions.Length; j++)
             {
-                if (collisions[j].gameObject.tag == "Enemy") collisions[j].gameObject.GetComponent<Enemy>().takeDamage(preparedSpell);
+                if (collisions[j].gameObject.CompareTag("Enemy")) collisions[j].gameObject.GetComponent<Enemy>().takeDamage(preparedSpell);
             }
         }
         else if (preparedSpell.name == SpellName.Tornado)
@@ -185,7 +204,7 @@ public class Player : MonoBehaviour
         RaycastHit2D[] hit = Physics2D.RaycastAll(new Vector2(this.transform.position.x + 0.51f, this.transform.position.y), Vector2.right, 3f);
         for (int i = 0; i < hit.Length; i++)
         {
-            if (hit[i].transform.gameObject.tag == "Enemy")
+            if (hit[i].transform.gameObject.CompareTag("Enemy"))
             {
                 enemyInRange = true;
                 if (hit[i].distance < 1f && !ControllerManager.Instance.getDevourerController().isActive())

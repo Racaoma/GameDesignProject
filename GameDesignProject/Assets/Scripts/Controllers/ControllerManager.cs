@@ -12,6 +12,8 @@ public class ControllerManager : MonoBehaviour
     private DevourerController devourerController;
     private ScreenFlashController screenFlashController;
     private CorruptionController corruptionController;
+    private EnvironmentController environmentController;
+    private ConditionController conditionController;
 
     //Singleton Instance Variable
     private static ControllerManager instance;
@@ -53,6 +55,8 @@ public class ControllerManager : MonoBehaviour
         devourerController = this.GetComponent<DevourerController>();
         screenFlashController = this.GetComponent<ScreenFlashController>();
         corruptionController = this.GetComponent<CorruptionController>();
+        environmentController = this.GetComponent<EnvironmentController>();
+        conditionController = this.GetComponent<ConditionController>();
     }
 
     //Get Methods
@@ -89,5 +93,15 @@ public class ControllerManager : MonoBehaviour
     public CorruptionController getCorruptionController()
     {
         return corruptionController;
+    }
+
+    public EnvironmentController getEnvironmentController()
+    {
+        return environmentController;
+    }
+
+    public ConditionController getConditionController()
+    {
+        return conditionController;
     }
 }

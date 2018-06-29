@@ -37,7 +37,7 @@ public class Tornado : MonoBehaviour
                 Collider2D[] collisions = Physics2D.OverlapCircleAll(pivotCenter, range/2f);
                 for (int j = 0; j < collisions.Length; j++)
                 {
-                    if (collisions[j].gameObject.tag == "Enemy")
+                    if (collisions[j].gameObject.CompareTag("Enemy"))
                     {
                         Enemy enemy = collisions[j].gameObject.GetComponent<Enemy>();
                         enemy.setCondition(Condition.Slowed, 1f);

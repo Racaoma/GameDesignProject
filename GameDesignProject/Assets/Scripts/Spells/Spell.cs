@@ -15,7 +15,7 @@ public enum SpellName
     //Improved Spells
     DeepFreeze,
     Hellfire,
-    ChainLightning,
+    Superbolt,
     Hurricane,
     Cloudburst,
     Purify,
@@ -23,7 +23,6 @@ public enum SpellName
     //Combo Spells
     ThunderStorm, //Summon Rain + Lightning Strike
     HailStorm, //Summon Rain + Flash Freeze
-    Superbolt, //Lightning Strike + Fire Blast
     Typhoon, //Hurricane + Rain
     SuperCell, //Hurricane + Lightning Strike
     FireStorm, //Hurricane + Fire Blast

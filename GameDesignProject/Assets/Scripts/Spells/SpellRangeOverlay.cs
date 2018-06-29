@@ -132,10 +132,10 @@ public class SpellRangeOverlay : MonoBehaviour
     public Vector2[] getAffectedArea()
     {
         Vector2[] affectedArea = new Vector2[activeOverlays.Count];
-        int index = 0;
 
         //Iterate Linked List
-        foreach(GameObject obj in activeOverlays)
+        int index = 0;
+        foreach (GameObject obj in activeOverlays)
         {
             affectedArea[index] = obj.transform.position;
             index++;

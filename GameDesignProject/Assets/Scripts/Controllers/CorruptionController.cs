@@ -34,8 +34,8 @@ public class CorruptionController : MonoBehaviour
     //Gain Corruption
     public void gainCorruption(int value)
     {
-        if(value >= 0) Mathf.Min(value, 100);
-        else corruption = Mathf.Max(value, 0);
+        if(value >= 0) corruption = Mathf.Min(corruption + value, 100);
+        else corruption = Mathf.Max(corruption + value, 0);
 
         //Debug
         Debug.Log("Current Corruption: " + corruption);

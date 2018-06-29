@@ -9,6 +9,7 @@ public class SpellEffectController : MonoBehaviour
     public GameObject tornado;
     public GameObject lightning;
     public GameObject cleanseEffect;
+    public GameObject shockEffect;
 
     //Spawn Effect Method
     public void spawnEffect(Spell spell, Vector2 position)
@@ -28,5 +29,11 @@ public class SpellEffectController : MonoBehaviour
                 Instantiate(cleanseEffect, cleanseEffect.transform.position, Quaternion.identity);
                 break;
         }
+    }
+
+    //Spawn Shock Effect
+    public GameObject spawnShockEffect(Vector2 position)
+    {
+        return Instantiate(shockEffect, position, Quaternion.identity);
     }
 }
