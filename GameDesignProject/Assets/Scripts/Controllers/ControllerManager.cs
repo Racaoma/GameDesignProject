@@ -14,6 +14,7 @@ public class ControllerManager : MonoBehaviour
     private CorruptionController corruptionController;
     private EnvironmentController environmentController;
     private ConditionController conditionController;
+    private GrimmoireController grimmoireController;
 
     //Singleton Instance Variable
     private static ControllerManager instance;
@@ -57,6 +58,7 @@ public class ControllerManager : MonoBehaviour
         corruptionController = this.GetComponent<CorruptionController>();
         environmentController = this.GetComponent<EnvironmentController>();
         conditionController = this.GetComponent<ConditionController>();
+        grimmoireController = this.GetComponent<GrimmoireController>();
     }
 
     //Get Methods
@@ -103,5 +105,10 @@ public class ControllerManager : MonoBehaviour
     public ConditionController getConditionController()
     {
         return conditionController;
+    }
+
+    public GrimmoireController getGrimmoireController()
+    {
+        return grimmoireController;
     }
 }

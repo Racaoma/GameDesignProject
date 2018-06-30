@@ -39,7 +39,7 @@ public class CursorChangerController : MonoBehaviour
                 if (hasMana) Cursor.SetCursor(lightningStrikeCursor, Vector2.zero, CursorMode.Auto);
                 else Cursor.SetCursor(lightningStrikeCursorNoMana, Vector2.zero, CursorMode.Auto);
                 break;
-            case SpellName.Hurricane:
+            case SpellName.Tornado:
                 if (hasMana) Cursor.SetCursor(tornadoCursor, Vector2.zero, CursorMode.Auto);
                 else Cursor.SetCursor(tornadoCursorNoMana, Vector2.zero, CursorMode.Auto);
                 break;

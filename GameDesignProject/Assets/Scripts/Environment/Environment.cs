@@ -24,7 +24,14 @@ public class Environment : MonoBehaviour
         remainingConditionTime = 0f;
     }
 
-    public void setEnvironmentCondition(EnvironmentCondition condition)
+    //Set New Time to Environment Condition
+    public void setTime(float newTime)
+    {
+        remainingConditionTime = newTime;
+    }
+
+    //Set Environment Condition
+    public void setEnvironmentCondition(EnvironmentCondition condition, float additionalTime = 0f)
     {
         if (condition == EnvironmentCondition.Fire)
         {
@@ -46,7 +53,7 @@ public class Environment : MonoBehaviour
             {
                 currentEnvironmentCondition = EnvironmentCondition.Ice;
                 this.transform.GetComponent<SpriteRenderer>().sprite = ControllerManager.Instance.getEnvironmentController().iceSprite;
-                remainingConditionTime = ControllerManager.Instance.getEnvironmentController().iceDuration;
+                remainingConditionTime = ControllerManager.Instance.getEnvironmentController().iceDuration + additionalTime;
             }
         }
         else if (condition == EnvironmentCondition.Puddle)
@@ -55,7 +62,7 @@ public class Environment : MonoBehaviour
             {
                 currentEnvironmentCondition = EnvironmentCondition.Puddle;
                 this.transform.GetComponent<SpriteRenderer>().sprite = ControllerManager.Instance.getEnvironmentController().puddleSprite;
-                remainingConditionTime = ControllerManager.Instance.getEnvironmentController().puddleDuration;
+                remainingConditionTime = ControllerManager.Instance.getEnvironmentController().puddleDuration + additionalTime;
             }
         }
         else if(condition == EnvironmentCondition.Shock)
@@ -65,7 +72,7 @@ public class Environment : MonoBehaviour
                 currentEnvironmentCondition = EnvironmentCondition.Shock;
                 GameObject obj = ControllerManager.Instance.getSpellEffectController().spawnShockEffect(this.transform.position);
                 obj.transform.parent = this.gameObject.transform;
-                remainingConditionTime = ControllerManager.Instance.getEnvironmentController().shockDuration;
+                remainingConditionTime = ControllerManager.Instance.getEnvironmentController().shockDuration + additionalTime;
             }
         }
     }

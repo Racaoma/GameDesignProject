@@ -14,6 +14,36 @@ public class SpellRangeOverlay : MonoBehaviour
     //Current Spell Center
     private Vector2 currentSpellCenter;
 
+    //Singleton Instance Variable
+    private static SpellRangeOverlay instance;
+    public static SpellRangeOverlay Instance
+    {
+        get
+        {
+            return instance;
+        }
+    }
+
+    //On Object Awake
+    private void Awake()
+    {
+        //Check Singleton
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+    }
+
+    //On Object Destroy (Safeguard)
+    public void OnDestroy()
+    {
+        instance = null;
+    }
+
     //Start Method
     private void Start()
     {

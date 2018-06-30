@@ -40,10 +40,10 @@ public class EnvironmentController : MonoBehaviour
     }
 
     //Set Environment Condition
-    public void setEnvironmentCondition(Vector2 position, EnvironmentCondition condition)
+    public void setEnvironmentCondition(Vector2 position, EnvironmentCondition condition, float additionalTime = 0f)
     {
         int tileNumber = ((int)(position.y + 5f) * width) + (int)(position.x + 9f);
-        if (insideArea(tileNumber)) tiles[tileNumber].GetComponent<Environment>().setEnvironmentCondition(condition);
+        if (insideArea(tileNumber)) tiles[tileNumber].GetComponent<Environment>().setEnvironmentCondition(condition, additionalTime);
     }
 
     //Check if Inside Area
@@ -51,6 +51,18 @@ public class EnvironmentController : MonoBehaviour
     {
         if (cellNumber >= 0 && cellNumber < tiles.Length) return true;
         else return false;
+    }
+
+    //Get All Puddle
+    public List<Environment> getAllPuddles()
+    {
+        List<Environment> result = new List<Environment>();
+        for (int x = 0; x < tiles.Length; x++)
+        {
+            Environment env = tiles[x].GetComponent<Environment>();
+            if (env.currentEnvironmentCondition == EnvironmentCondition.Puddle) result.Add(env);
+        }
+        return result;
     }
 
     //Get Connected Puddles

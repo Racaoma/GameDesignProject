@@ -15,4 +15,6 @@ public class ConditionController : MonoBehaviour
     public float stunnedDuration = 3f;
     public float shockedDuration = 3f;
     public float ablazeDuration = 3f;
+    public float ablazeDamageInterval = 1f;
+    public int ablazeDamage = 5;
 }

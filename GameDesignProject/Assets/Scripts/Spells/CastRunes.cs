@@ -11,12 +11,56 @@ public class CastRunes : MonoBehaviour
     //Last Visited Sphere
     private int lastSphere = 10;
 
+    //Singleton Instance Variable
+    private static CastRunes instance;
+    public static CastRunes Instance
+    {
+        get
+        {
+            return instance;
+        }
+    }
+
+    //On Object Awake
+    private void Awake()
+    {
+        //Check Singleton
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            instance = this;
+            this.gameObject.SetActive(false);
+        }
+    }
+
+    //On Object Destroy (Safeguard)
+    public void OnDestroy()
+    {
+        instance = null;
+    }
+
+    //Enable Cast Runes
+    public void enableCastRunes()
+    {
+        this.gameObject.SetActive(true);
+        ControllerManager.Instance.getCursorChangerController().resetMouse();
+    }
+
     //Disable CastRunes Method
     public void disableCastRunes()
     {
         checkCast();
         resetCastRunes();
         gameObject.SetActive(false);
+    }
+
+    //Check if Enables
+    public bool isActive()
+    {
+        return this.gameObject.activeInHierarchy;
     }
 
     //Activate Sphere Path
@@ -273,7 +317,7 @@ public class CastRunes : MonoBehaviour
         }
 
         //Pass Results to Player
-        Player.Instance.prepareNewSpell(SpellDatabase.checkRune(activeSpheres));
+        ControllerManager.Instance.getGrimmoireController().prepareNewSpell(SpellDatabase.checkRune(activeSpheres));
     }
 
     //Reset CastRunes Method
@@ -291,5 +335,11 @@ public class CastRunes : MonoBehaviour
         {
             pathList[i].SetActive(false);
         }
+    }
+
+    //Update Method
+    private void Update()
+    {
+        if (Input.GetMouseButtonUp(0) && isActive()) disableCastRunes();
     }
 }

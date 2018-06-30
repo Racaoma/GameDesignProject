@@ -34,14 +34,19 @@ public class Tornado : MonoBehaviour
             if (currentIntervalPoint <= 0f)
             {
                 //Trigger Damage & Slow
+                List<Enemy> affectedEnemies = new List<Enemy>();
                 Collider2D[] collisions = Physics2D.OverlapCircleAll(pivotCenter, range/2f);
                 for (int j = 0; j < collisions.Length; j++)
                 {
                     if (collisions[j].gameObject.CompareTag("Enemy"))
                     {
                         Enemy enemy = collisions[j].gameObject.GetComponent<Enemy>();
-                        enemy.setCondition(Condition.Slowed, 1f);
-                        enemy.takeDamage(SpellDatabase.tornadoSpell);
+                        if (!affectedEnemies.Contains(enemy))
+                        {
+                            enemy.setCondition(Condition.Slowed, 1f, 0.5f);
+                            enemy.takeDamage(SpellDatabase.tornadoSpell);
+                            affectedEnemies.Add(enemy);
+                        }
                     }
                 }
 
