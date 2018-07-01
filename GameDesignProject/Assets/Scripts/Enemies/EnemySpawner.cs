@@ -89,8 +89,14 @@ public class EnemySpawner : MonoBehaviour
         enemy.SetActive(false);
         currentEnemies.Remove(enemy);
     }
+
+    //Get Active Enemies
+    public List<GameObject> getActiveEnemies()
+    {
+        return currentEnemies;
+    }
 	
-    //Shuffle Lists
+    //Shuffle Enemy List
     private void shuffleEnemyList()
     {
         for (int i = 0; i < possibleEnemiesPool.Count; i++)
@@ -102,6 +108,7 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    //Shuffle Lane List
     private void shuffleLaneList()
     {
         for (int i = 0; i < lanes.Length; i++)

@@ -25,9 +25,9 @@ public class Environment : MonoBehaviour
     }
 
     //Set New Time to Environment Condition
-    public void setTime(float newTime)
+    public void addTime(float time)
     {
-        remainingConditionTime = newTime;
+        remainingConditionTime += time;
     }
 
     //Set Environment Condition
@@ -62,18 +62,16 @@ public class Environment : MonoBehaviour
             {
                 currentEnvironmentCondition = EnvironmentCondition.Puddle;
                 this.transform.GetComponent<SpriteRenderer>().sprite = ControllerManager.Instance.getEnvironmentController().puddleSprite;
+                this.transform.GetComponent<Animator>().enabled = true;
                 remainingConditionTime = ControllerManager.Instance.getEnvironmentController().puddleDuration + additionalTime;
             }
         }
         else if(condition == EnvironmentCondition.Shock)
         {
-            if (currentEnvironmentCondition == EnvironmentCondition.Puddle)
-            {
-                currentEnvironmentCondition = EnvironmentCondition.Shock;
-                GameObject obj = ControllerManager.Instance.getSpellEffectController().spawnShockEffect(this.transform.position);
-                obj.transform.parent = this.gameObject.transform;
-                remainingConditionTime = ControllerManager.Instance.getEnvironmentController().shockDuration + additionalTime;
-            }
+            currentEnvironmentCondition = EnvironmentCondition.Shock;
+            GameObject obj = ControllerManager.Instance.getSpellEffectController().spawnShockEffect(this.transform.position);
+            obj.transform.parent = this.gameObject.transform;
+            remainingConditionTime = ControllerManager.Instance.getEnvironmentController().shockDuration + additionalTime;
         }
     }
 
@@ -103,6 +101,9 @@ public class Environment : MonoBehaviour
                     Destroy(this.transform.GetChild(0).gameObject);
                     remainingConditionTime = ControllerManager.Instance.getEnvironmentController().puddleDuration;
                 }
+
+                //Disable Animation
+                this.transform.GetComponent<Animator>().enabled = false;
             }
         }
 	}

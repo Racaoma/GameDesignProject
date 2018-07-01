@@ -15,6 +15,7 @@ public class ControllerManager : MonoBehaviour
     private EnvironmentController environmentController;
     private ConditionController conditionController;
     private GrimmoireController grimmoireController;
+    private EnemySpawner enemySpawner;
 
     //Singleton Instance Variable
     private static ControllerManager instance;
@@ -59,6 +60,7 @@ public class ControllerManager : MonoBehaviour
         environmentController = this.GetComponent<EnvironmentController>();
         conditionController = this.GetComponent<ConditionController>();
         grimmoireController = this.GetComponent<GrimmoireController>();
+        enemySpawner = this.GetComponent<EnemySpawner>();
     }
 
     //Get Methods
@@ -110,5 +112,10 @@ public class ControllerManager : MonoBehaviour
     public GrimmoireController getGrimmoireController()
     {
         return grimmoireController;
+    }
+
+    public EnemySpawner getEnemySpawner()
+    {
+        return enemySpawner;
     }
 }

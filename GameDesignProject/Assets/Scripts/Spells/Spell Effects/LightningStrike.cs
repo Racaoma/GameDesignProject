@@ -5,7 +5,7 @@ using UnityEngine;
 public class LightningStrike : MonoBehaviour
 {
     //Variables
-    public float duration;
+    public float fade;
     private SpriteRenderer spriteRenderer;
 
     //Start Method
@@ -17,7 +17,7 @@ public class LightningStrike : MonoBehaviour
     // Update is called once per frame
     void Update ()
     {
-        spriteRenderer.color = new Color(1f, 1f, 1f, spriteRenderer.color.a - (duration * Time.deltaTime));
+        spriteRenderer.color = new Color(1f, 1f, 1f, spriteRenderer.color.a - (fade * Time.deltaTime));
         if (spriteRenderer.color.a <= 0f) Destroy(this.gameObject);
     }
 }

@@ -11,10 +11,10 @@ public class ConditionController : MonoBehaviour
     public RuntimeAnimatorController ablazeAnimation;
 
     //Balance Variables
-    public float frozenDuration = 5f;
-    public float stunnedDuration = 3f;
-    public float shockedDuration = 3f;
-    public float ablazeDuration = 3f;
-    public float ablazeDamageInterval = 1f;
-    public int ablazeDamage = 5;
+    public float frozenDuration;
+    public float stunnedDuration;
+    public float shockedDuration;
+    public float ablazeDuration;
+    public float ablazeDamageInterval;
+    public int ablazeDamage;
 }

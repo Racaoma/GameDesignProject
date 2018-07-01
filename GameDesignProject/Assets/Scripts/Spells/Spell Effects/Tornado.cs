@@ -11,6 +11,7 @@ public class Tornado : MonoBehaviour
 
     //Internal Variables
     public SpriteRenderer ringAreaSpriteRenderer;
+    public bool fireStorm;
     private Vector2 pivotCenter;
     private float currentIntervalPoint;
     private float remainingDuration;
@@ -18,7 +19,7 @@ public class Tornado : MonoBehaviour
     //Start Method
     private void Start()
     {
-        ringAreaSpriteRenderer.transform.localScale = Vector2.one * range;
+        ringAreaSpriteRenderer.transform.localScale = (Vector2.one * range) / this.transform.localScale.x;
         currentIntervalPoint = 0f;
         remainingDuration = duration;
         pivotCenter = this.transform.GetChild(0).transform.position;
@@ -43,8 +44,9 @@ public class Tornado : MonoBehaviour
                         Enemy enemy = collisions[j].gameObject.GetComponent<Enemy>();
                         if (!affectedEnemies.Contains(enemy))
                         {
-                            enemy.setCondition(Condition.Slowed, 1f, 0.5f);
-                            enemy.takeDamage(SpellDatabase.tornadoSpell);
+                            if(fireStorm) enemy.setCondition(Condition.Ablaze, ControllerManager.Instance.getConditionController().ablazeDuration);
+                            else enemy.setCondition(Condition.Slowed, 1f, 0.5f);
+                            enemy.takeDamage(SpellDatabase.tornadoSpell.damage);
                             affectedEnemies.Add(enemy);
                         }
                     }

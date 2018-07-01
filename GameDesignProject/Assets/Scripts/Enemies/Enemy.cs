@@ -35,12 +35,12 @@ public class Enemy : MonoBehaviour
     //Conditions
     private Condition currentCondition;
     private float remainingConditionTime;
+    private float currentIntervalPoint;
     private float stunGrace;
 
     //Start Method
     private void Start()
     {
-        speedFactor = 1f;
         resetInternalVariables();
         GameObject child = this.transform.GetChild(0).gameObject;
         conditionAnimator = child.GetComponent<Animator>();
@@ -56,6 +56,8 @@ public class Enemy : MonoBehaviour
     //Reset Internal Variables Method
     private void resetInternalVariables()
     {
+        speedFactor = 1f;
+        currentIntervalPoint = 0f;
         healthBar.fillAmount = 1f;
         currentHitPoints = maxHitPoints;
         stunGrace = 0f;
@@ -71,9 +73,9 @@ public class Enemy : MonoBehaviour
     }
 
     //Take Damage
-    public void takeDamage(Spell spell)
+    public void takeDamage(int damage)
     {   
-        currentHitPoints -= spell.damage;
+        currentHitPoints -= damage;
         healthBar.fillAmount = (float) currentHitPoints / (float) maxHitPoints;
         if (currentHitPoints <= 0) killEnemy();
     }
@@ -122,6 +124,7 @@ public class Enemy : MonoBehaviour
                     break;
                 case Condition.Ablaze:
                     conditionAnimator.runtimeAnimatorController = ControllerManager.Instance.getConditionController().ablazeAnimation;
+                    currentIntervalPoint = ControllerManager.Instance.getConditionController().ablazeDamageInterval;
                     break;
                 case Condition.Slowed:
                     this.speedFactor = speedFactor;
@@ -156,8 +159,20 @@ public class Enemy : MonoBehaviour
         //Update Conditions
         if (currentCondition != Condition.None)
         {
+            //Ablaze Damage
+            if (currentCondition == Condition.Ablaze)
+            {
+                currentIntervalPoint -= Time.deltaTime;
+                if (currentIntervalPoint <= 0f)
+                {
+                    takeDamage(ControllerManager.Instance.getConditionController().ablazeDamage);
+                    currentIntervalPoint = ControllerManager.Instance.getConditionController().ablazeDamageInterval;
+                }
+            }
+
+            //Update Remaining Condition Time
+            remainingConditionTime -= Time.deltaTime;
             if (remainingConditionTime <= 0f) clearConditions();
-            else remainingConditionTime -= Time.deltaTime;
         }
 
         //Update Stun Grace

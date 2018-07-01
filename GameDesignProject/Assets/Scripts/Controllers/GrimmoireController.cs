@@ -218,7 +218,7 @@ public class GrimmoireController : MonoBehaviour
                 if (preparedSpell2.name == SpellName.SummonRain) return SpellDatabase.cloudBurstSpell;
                 else if (preparedSpell2.name == SpellName.FlashFreeze) return SpellDatabase.hailStormSpell;
                 else if (preparedSpell2.name == SpellName.LightningStrike) return SpellDatabase.thunderStormSpell;
-                else if (preparedSpell2.name == SpellName.Tornado) return SpellDatabase.blizzardSpell;
+                else if (preparedSpell2.name == SpellName.Tornado) return SpellDatabase.typhoonSpell;
                 else return null;
             }
             else if (preparedSpell1.name == SpellName.Cleanse)
@@ -243,10 +243,12 @@ public class GrimmoireController : MonoBehaviour
         Player.Instance.setManaTextBalloon(false);
 
         //Spell Logic
+        #region Flash Freeze
         if (preparedSpell.name == SpellName.FlashFreeze)
         {
             //Animate
             Player.Instance.setCastingAnimation(0);
+            ControllerManager.Instance.getScreenFlashController().flashScreen(2f);
 
             //Iterate Affected Area
             List<Enemy> affectedEnemies = new List<Enemy>();
@@ -271,6 +273,8 @@ public class GrimmoireController : MonoBehaviour
                 }
             }
         }
+        #endregion
+        #region Fire Blast
         else if (preparedSpell.name == SpellName.FireBlast)
         {
             //Animate
@@ -288,7 +292,7 @@ public class GrimmoireController : MonoBehaviour
                 if (affectedArea[i] == (Vector2) Player.Instance.gameObject.transform.position) continue;
 
                 //Spawn Fire
-                ControllerManager.Instance.getSpellEffectController().spawnEffect(preparedSpell, affectedArea[i]);
+                ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.fireBlastSpell, affectedArea[i]);
 
                 //Check for Affected Enemies
                 Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea[i], new Vector2(0.95f, 0.95f), 0f);
@@ -300,24 +304,24 @@ public class GrimmoireController : MonoBehaviour
                         if (!affectedEnemies.Contains(enemy))
                         {
                             enemy.setCondition(Condition.Ablaze, 0f);
-                            enemy.takeDamage(preparedSpell);
+                            enemy.takeDamage(SpellDatabase.fireBlastSpell.damage);
                             affectedEnemies.Add(enemy);
                         }
                     }
                 }
             }
         }
+        #endregion
+        #region Lightning Strike
         else if (preparedSpell.name == SpellName.LightningStrike)
         {
             //Animate
             Player.Instance.setCastingAnimation(2);
-
-            //Juicyness
             ControllerManager.Instance.getScreenShakeController().screenShake(0.3f, 0.5f);
             ControllerManager.Instance.getScreenFlashController().flashScreen(0.8f);
 
             //Spawn Lightning
-            ControllerManager.Instance.getSpellEffectController().spawnEffect(preparedSpell, affectedArea[0]);
+            ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.lightningStrikeSpell, affectedArea[0]);
 
             //Check for Puddles
             EnvironmentCondition affectedTile = ControllerManager.Instance.getEnvironmentController().getEnvironmentCondition(affectedArea[0]);
@@ -336,37 +340,283 @@ public class GrimmoireController : MonoBehaviour
             {
                 if (collisions[j].gameObject.CompareTag("Enemy"))
                 {
-                    collisions[j].gameObject.GetComponent<Enemy>().takeDamage(preparedSpell);
+                    collisions[j].gameObject.GetComponent<Enemy>().takeDamage(SpellDatabase.lightningStrikeSpell.damage);
                 }
             }
         }
+        #endregion
+        #region Tornado
         else if (preparedSpell.name == SpellName.Tornado)
         {
             //Animate
             Player.Instance.setCastingAnimation(3);
+            ControllerManager.Instance.getScreenShakeController().screenShake(0.05f, 0.8f);
 
-            //Spawn Hurricane
-            ControllerManager.Instance.getSpellEffectController().spawnEffect(preparedSpell, new Vector2(affectedArea[0].x - 0.1f, affectedArea[0].y + 0.3f));
+            //Spawn Tornado
+            ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.tornadoSpell, new Vector2(affectedArea[0].x - 0.1f, affectedArea[0].y + 0.3f));
         }
+        #endregion
+        #region Summon Rain
         else if (preparedSpell.name == SpellName.SummonRain)
         {
             //Animate
             Player.Instance.setCastingAnimation(4);
+            ControllerManager.Instance.getScreenShakeController().screenShake(0.2f, 0.2f);
+            ControllerManager.Instance.getScreenFlashController().flashScreen(1f);
 
             //Activate Rain
             ControllerManager.Instance.getSpellEffectController().activateRain(10f, 1f);
         }
+        #endregion
+        #region Cleanse
         else if (preparedSpell.name == SpellName.Cleanse)
         {
             //Animate
             Player.Instance.setCastingAnimation(5);
+            ControllerManager.Instance.getScreenFlashController().flashScreen(3f);
 
             //Spawn Effect
-            ControllerManager.Instance.getSpellEffectController().spawnEffect(preparedSpell, Vector2.zero);
+            ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.cleanseSpell, Vector2.zero);
 
             //Heal!
-            ControllerManager.Instance.getCorruptionController().gainCorruption(-10);
+            ControllerManager.Instance.getCorruptionController().gainCorruption(SpellDatabase.cleanseSpell.damage);
         }
+        #endregion
+        #region Deep Freeze
+        else if (preparedSpell.name == SpellName.DeepFreeze)
+        {
+            //Animate
+            Player.Instance.setCastingAnimation(0);
+            ControllerManager.Instance.getScreenFlashController().flashScreen(2f);
+
+            //Iterate Affected Area
+            List<Enemy> affectedEnemies = new List<Enemy>();
+            for (int i = 0; i < affectedArea.Length; i++)
+            {
+                //Check for Puddles
+                ControllerManager.Instance.getEnvironmentController().setEnvironmentCondition(affectedArea[i], EnvironmentCondition.Ice);
+
+                //Check for Enemies
+                Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea[i], new Vector2(0.95f, 0.95f), 0f);
+                for (int j = 0; j < collisions.Length; j++)
+                {
+                    if (collisions[j].gameObject.CompareTag("Enemy"))
+                    {
+                        Enemy enemy = collisions[j].gameObject.GetComponent<Enemy>();
+                        if (!affectedEnemies.Contains(enemy))
+                        {
+                            enemy.setCondition(Condition.Frozen, ControllerManager.Instance.getConditionController().frozenDuration * 2);
+                            affectedEnemies.Add(enemy);
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
+        #region Hell Fire
+        else if (preparedSpell.name == SpellName.Hellfire)
+        {
+            //Animate
+            Player.Instance.setCastingAnimation(1);
+            ControllerManager.Instance.getScreenShakeController().screenShake(0.2f, 0.3f);
+
+            //Iterate Affected Area
+            List<Enemy> affectedEnemies = new List<Enemy>();
+            for (int i = 0; i < affectedArea.Length; i++)
+            {
+                //Check for Puddles
+                ControllerManager.Instance.getEnvironmentController().setEnvironmentCondition(affectedArea[i], EnvironmentCondition.Fire);
+
+                //If Area is Mage, Ignore
+                if (affectedArea[i] == (Vector2)Player.Instance.gameObject.transform.position) continue;
+
+                //Spawn Fire
+                ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.hellFireSpell, affectedArea[i]);
+
+                //Check for Affected Enemies
+                Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea[i], new Vector2(0.95f, 0.95f), 0f);
+                for (int j = 0; j < collisions.Length; j++)
+                {
+                    if (collisions[j].gameObject.CompareTag("Enemy"))
+                    {
+                        Enemy enemy = collisions[j].gameObject.GetComponent<Enemy>();
+                        if (!affectedEnemies.Contains(enemy))
+                        {
+                            enemy.setCondition(Condition.Ablaze, ControllerManager.Instance.getConditionController().ablazeDuration);
+                            enemy.takeDamage(SpellDatabase.hellFireSpell.damage);
+                            affectedEnemies.Add(enemy);
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
+        #region Superbolt
+        else if (preparedSpell.name == SpellName.Superbolt)
+        {
+            //Animate
+            Player.Instance.setCastingAnimation(2);
+
+            //Juicyness
+            ControllerManager.Instance.getScreenShakeController().screenShake(0.3f, 0.5f);
+            ControllerManager.Instance.getScreenFlashController().flashScreen(0.8f);
+
+            //Spawn Lightning
+            ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.superboltSpell, affectedArea[0]);
+
+            //Check for Puddles
+            EnvironmentCondition affectedTile = ControllerManager.Instance.getEnvironmentController().getEnvironmentCondition(affectedArea[0]);
+            if (affectedTile == EnvironmentCondition.Puddle || affectedTile == EnvironmentCondition.Shock)
+            {
+                Vector2[] affectedTiles = ControllerManager.Instance.getEnvironmentController().getConnectedPuddles(affectedArea[0]);
+                for (int i = 0; i < affectedTiles.Length; i++)
+                {
+                    ControllerManager.Instance.getEnvironmentController().setEnvironmentCondition(affectedTiles[i], EnvironmentCondition.Shock);
+                }
+            }
+
+            //Shock All Adjacent
+            ControllerManager.Instance.getEnvironmentController().setEnvironmentCondition(affectedArea[0], EnvironmentCondition.Shock);
+            List<Vector2> adjacent = ControllerManager.Instance.getEnvironmentController().getAdjacentTiles(affectedArea[0]);
+            for(int i = 0; i < adjacent.Count; i++)
+            {
+                ControllerManager.Instance.getEnvironmentController().setEnvironmentCondition(adjacent[i], EnvironmentCondition.Shock);
+            }
+
+            //Check for Affected Enemies
+            Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea[0], new Vector2(0.95f, 0.95f), 0f);
+            for (int j = 0; j < collisions.Length; j++)
+            {
+                if (collisions[j].gameObject.CompareTag("Enemy"))
+                {
+                    collisions[j].gameObject.GetComponent<Enemy>().takeDamage(SpellDatabase.superboltSpell.damage);
+                }
+            }
+        }
+        #endregion
+        #region Hurricane
+        else if (preparedSpell.name == SpellName.Hurricane)
+        {
+            //Animate
+            Player.Instance.setCastingAnimation(3);
+            ControllerManager.Instance.getScreenShakeController().screenShake(0.08f, 0.8f);
+
+            //Spawn Hurricane
+            ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.hurricaneSpell, new Vector2(affectedArea[0].x - 0.1f, affectedArea[0].y + 0.3f));
+        }
+        #endregion
+        #region Cloudburst
+        else if (preparedSpell.name == SpellName.Cloudburst)
+        {
+            //Animate
+            Player.Instance.setCastingAnimation(4);
+            ControllerManager.Instance.getScreenShakeController().screenShake(0.2f, 0.2f);
+            ControllerManager.Instance.getScreenFlashController().flashScreen(1f);
+
+            //Activate Rain
+            ControllerManager.Instance.getSpellEffectController().activateRain(15f, 0.5f);
+        }
+        #endregion
+        #region Purify
+        else if (preparedSpell.name == SpellName.Purify)
+        {
+            //Animate
+            Player.Instance.setCastingAnimation(5);
+            ControllerManager.Instance.getScreenFlashController().flashScreen(3f);
+
+            //Spawn Effect
+            ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.purifySpell, Vector2.zero);
+
+            //Heal!
+            ControllerManager.Instance.getCorruptionController().gainCorruption(SpellDatabase.purifySpell.damage);
+        }
+        #endregion
+        #region Thunder Storm
+        else if (preparedSpell.name == SpellName.ThunderStorm)
+        {
+            //Animate
+            Player.Instance.setCastingAnimation(2);
+            ControllerManager.Instance.getScreenFlashController().flashScreen(3f);
+            ControllerManager.Instance.getScreenShakeController().screenShake(0.1f, 0.5f);
+
+            //Activate Rain
+            ControllerManager.Instance.getSpellEffectController().activateThunderStorm(10f, 1f, 1.5f);
+        }
+        #endregion
+        #region Hail Storm
+        else if (preparedSpell.name == SpellName.HailStorm)
+        {
+            //Animate
+            Player.Instance.setCastingAnimation(4);
+            ControllerManager.Instance.getScreenShakeController().screenShake(0.2f, 0.2f);
+            ControllerManager.Instance.getScreenFlashController().flashScreen(1f);
+
+            //Activate Hail Storm
+            ControllerManager.Instance.getSpellEffectController().activateHailStorm(1000f, 1f);
+        }
+        #endregion
+        #region Typhoon
+        else if (preparedSpell.name == SpellName.Typhoon)
+        {
+            //Animate
+            Player.Instance.setCastingAnimation(3);
+            ControllerManager.Instance.getScreenShakeController().screenShake(0.05f, 0.8f);
+
+            //Spawn Tornado
+            ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.tornadoSpell, new Vector2(affectedArea[0].x - 0.1f, affectedArea[0].y + 0.3f));
+
+            //Activate Rain
+            ControllerManager.Instance.getSpellEffectController().activateRain(10f, 1f);
+        }
+        #endregion
+        #region Super Cell
+        else if (preparedSpell.name == SpellName.SuperCell)
+        {
+            //Animate
+            Player.Instance.setCastingAnimation(3);
+            ControllerManager.Instance.getScreenShakeController().screenShake(0.3f, 0.5f);
+            ControllerManager.Instance.getScreenFlashController().flashScreen(0.8f);
+
+            //Spawn Tornado
+            ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.tornadoSpell, new Vector2(affectedArea[0].x - 0.1f, affectedArea[0].y + 0.3f));
+
+            //Spawn Lightning
+            ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.lightningStrikeSpell, affectedArea[0]);
+
+            //Check for Puddles
+            EnvironmentCondition affectedTile = ControllerManager.Instance.getEnvironmentController().getEnvironmentCondition(affectedArea[0]);
+            if (affectedTile == EnvironmentCondition.Puddle || affectedTile == EnvironmentCondition.Shock)
+            {
+                Vector2[] affectedTiles = ControllerManager.Instance.getEnvironmentController().getConnectedPuddles(affectedArea[0]);
+                for (int i = 0; i < affectedTiles.Length; i++)
+                {
+                    ControllerManager.Instance.getEnvironmentController().setEnvironmentCondition(affectedTiles[i], EnvironmentCondition.Shock);
+                }
+            }
+
+            //Check for Affected Enemies
+            Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea[0], new Vector2(0.95f, 0.95f), 0f);
+            for (int j = 0; j < collisions.Length; j++)
+            {
+                if (collisions[j].gameObject.CompareTag("Enemy"))
+                {
+                    collisions[j].gameObject.GetComponent<Enemy>().takeDamage(SpellDatabase.lightningStrikeSpell.damage);
+                }
+            }
+
+        }
+        #endregion
+        #region Fire Storm
+        else if (preparedSpell.name == SpellName.FireStorm)
+        {
+            //Animate
+            Player.Instance.setCastingAnimation(1);
+            ControllerManager.Instance.getScreenShakeController().screenShake(0.05f, 0.8f);
+
+            //Spawn Tornado
+            ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.fireStormSpell, new Vector2(affectedArea[0].x - 0.1f, affectedArea[0].y + 0.3f));
+        }
+        #endregion
 
         //Reset Prepared Spells
         resetPreparedSpells();
@@ -377,6 +627,8 @@ public class GrimmoireController : MonoBehaviour
         //Reset Cursor
         ControllerManager.Instance.getCursorChangerController().resetMouse();
     }
+
+
 
     // Update is called once per frame
     void Update ()

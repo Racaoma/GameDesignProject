@@ -65,6 +65,49 @@ public class EnvironmentController : MonoBehaviour
         return result;
     }
 
+    //Get Adjacent Tiles
+    public List<Vector2> getAdjacentTiles(Vector2 center)
+    {
+        List<Vector2> result = new List<Vector2>();
+        if (center.y > -5f && center.y < 4f && center.x > -8.5f && center.x < 8.5f)
+        {
+            //UP
+            int tileNumber = ((int)(center.y + 6f) * width) + (int)(center.x + 9f);
+            if (insideArea(tileNumber)) result.Add(tiles[tileNumber].transform.position);
+
+            //DOWN
+            tileNumber = ((int)(center.y + 4f) * width) + (int)(center.x + 9f);
+            if (insideArea(tileNumber)) result.Add(tiles[tileNumber].transform.position);
+
+            //LEFT
+            tileNumber = ((int)(center.y + 5f) * width) + (int)(center.x + 8f);
+            if (insideArea(tileNumber)) result.Add(tiles[tileNumber].transform.position);
+
+            //RIGHT
+            tileNumber = ((int)(center.y + 5f) * width) + (int)(center.x + 10f);
+            if (insideArea(tileNumber)) result.Add(tiles[tileNumber].transform.position);
+
+            //MAIN DIAGONAL UPPER
+            tileNumber = ((int)(center.y + 6f) * width) + (int)(center.x + 8f);
+            if (insideArea(tileNumber)) result.Add(tiles[tileNumber].transform.position);
+
+            //MAIN DIAGONAL BOTTOM
+            tileNumber = ((int)(center.y + 4f) * width) + (int)(center.x + 10f);
+            if (insideArea(tileNumber)) result.Add(tiles[tileNumber].transform.position);
+
+            //SECONDARY DIAGONAL UPPER
+            tileNumber = ((int)(center.y + 6f) * width) + (int)(center.x + 10f);
+            if (insideArea(tileNumber)) result.Add(tiles[tileNumber].transform.position);
+
+            //SECONDARY DIAGONAL BOTTOM
+            tileNumber = ((int)(center.y + 4f) * width) + (int)(center.x + 8f);
+            if (insideArea(tileNumber)) result.Add(tiles[tileNumber].transform.position);
+        }
+
+        //Finally...
+        return result;
+    }
+
     //Get Connected Puddles
     public Vector2[] getConnectedPuddles(Vector2 position)
     {
