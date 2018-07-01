@@ -52,9 +52,12 @@ public class CastRunes : MonoBehaviour
     //Disable CastRunes Method
     public void disableCastRunes()
     {
-        checkCast();
-        resetCastRunes();
-        gameObject.SetActive(false);
+        if(this.gameObject.activeInHierarchy)
+        {
+            checkCast();
+            resetCastRunes();
+            this.gameObject.SetActive(false);
+        }
     }
 
     //Check if Enables

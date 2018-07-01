@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     private Animator animator;
     private GameObject textBalloon;
     private GameObject alert;
+    private bool closeEnemy;
 
     //Singleton Instance Variable
     private static Player instance;
@@ -45,6 +46,7 @@ public class Player : MonoBehaviour
         animator = this.GetComponent<Animator>();
         textBalloon = this.transform.GetChild(0).gameObject;
         alert = this.transform.GetChild(1).gameObject;
+        closeEnemy = false;
     }
 
     //On Mouse Click
@@ -70,16 +72,23 @@ public class Player : MonoBehaviour
     //Fixed Update
     private void FixedUpdate()
     {
-        bool enemyInRange = false;
         RaycastHit2D[] hit = Physics2D.RaycastAll(new Vector2(this.transform.position.x + 0.51f, this.transform.position.y), Vector2.right, 3f);
         for (int i = 0; i < hit.Length; i++)
         {
             if (hit[i].transform.gameObject.CompareTag("Enemy"))
             {
-                enemyInRange = true;
+                if(!closeEnemy)
+                {
+                    closeEnemy = true;
+                    animator.ResetTrigger("EnemiesCleared");
+                    animator.SetTrigger("Devourer");
+                    alert.SetActive(true);
+                }
+                
                 if (hit[i].distance < 1f && !ControllerManager.Instance.getDevourerController().isActive())
                 {
                     ControllerManager.Instance.getGrimmoireController().resetPreparedSpells();
+                    CastRunes.Instance.disableCastRunes();
                     ControllerManager.Instance.getCorruptionController().gainCorruption(20);
                     ControllerManager.Instance.getDevourerController().activateDevourer();
                     ControllerManager.Instance.getManaController().spendMana(ControllerManager.Instance.getManaController().getCurrentMana());
@@ -87,7 +96,14 @@ public class Player : MonoBehaviour
             }
         }
 
-        //Setup Alert
-        alert.SetActive(enemyInRange);
+        //Return from Devourer Animation
+        if (closeEnemy && hit.Length == 0)
+        {
+            animator.ResetTrigger("Cast");
+            animator.ResetTrigger("Devourer");
+            animator.SetTrigger("EnemiesCleared");
+            alert.SetActive(false);
+            closeEnemy = false;
+        }
     }
 }

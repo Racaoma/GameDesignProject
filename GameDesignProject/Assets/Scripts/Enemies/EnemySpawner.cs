@@ -136,7 +136,7 @@ public class EnemySpawner : MonoBehaviour
                         currentEnemies.Add(obj);
 
                         //Get Lane
-                        while ((Vector2) obj.transform.position == Vector2.zero)
+                        while ((Vector2)obj.transform.position == Vector2.zero)
                         {
                             for (i = 0; i < lanes.Length; i++)
                             {
@@ -147,7 +147,7 @@ public class EnemySpawner : MonoBehaviour
                                 }
                             }
                         }
-                        
+
                         //Set Active!
                         obj.SetActive(true);
 
