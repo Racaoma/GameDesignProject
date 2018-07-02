@@ -6,6 +6,20 @@ TextureImporter:
     21300002: HailStorm_1
     21300004: HailStorm_2
     21300006: HailStorm_3
+    21300008: HailStorm_4
+    21300010: HailStorm_5
+    21300012: HailStorm_6
+    21300014: HailStorm_7
+    21300016: HailStorm_8
+    21300018: HailStorm_9
+    21300020: HailStorm_10
+    21300022: HailStorm_11
+    21300024: HailStorm_12
+    21300026: HailStorm_13
+    21300028: HailStorm_14
+    21300030: HailStorm_15
+    21300032: HailStorm_16
+    21300034: HailStorm_17
   externalObjects: {}
   serializedVersion: 5
   mipmaps:
@@ -101,9 +115,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 1080
-        width: 1080
-        height: 1080
+        y: 1800
+        width: 540
+        height: 360
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -111,7 +125,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7a323cfea7ae0b344bb39910823c250b
+      spriteID: acc21f07d8544ef469da8076ee3c4535
       vertices: []
       indices: 
       edges: []
@@ -120,10 +134,10 @@ TextureImporter:
       name: HailStorm_1
       rect:
         serializedVersion: 2
-        x: 1080
-        y: 1080
-        width: 1080
-        height: 1080
+        x: 540
+        y: 1800
+        width: 540
+        height: 360
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -131,7 +145,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b64ab07efe0a9834b8492e21200a03bf
+      spriteID: 7eab6fc8d185c4840beb27477a37d79a
       vertices: []
       indices: 
       edges: []
@@ -140,10 +154,10 @@ TextureImporter:
       name: HailStorm_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1080
-        height: 1080
+        x: 1080
+        y: 1800
+        width: 540
+        height: 360
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -151,7 +165,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7eb1ed1071797c04485bc0c1a23bda60
+      spriteID: 36cf62b77e0c36f478cd9a9f9ff9eedc
       vertices: []
       indices: 
       edges: []
@@ -160,10 +174,10 @@ TextureImporter:
       name: HailStorm_3
       rect:
         serializedVersion: 2
-        x: 1080
-        y: 0
-        width: 1080
-        height: 1080
+        x: 0
+        y: 1440
+        width: 540
+        height: 360
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -171,7 +185,287 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3b995700a2ae94c4a9c9f8429733eedc
+      spriteID: 1f60f8ca519f6004a8936fba30ee766c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HailStorm_4
+      rect:
+        serializedVersion: 2
+        x: 540
+        y: 1440
+        width: 540
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1c69dff861362c43863a7f1db4a8f65
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HailStorm_5
+      rect:
+        serializedVersion: 2
+        x: 1080
+        y: 1440
+        width: 540
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49fe02cdf1ae33d4681151649b35c9d7
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HailStorm_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1080
+        width: 540
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17e2de5a5120f4940bf382204c8f48d5
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HailStorm_7
+      rect:
+        serializedVersion: 2
+        x: 540
+        y: 1080
+        width: 540
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7582e99d16ab6634ba2823970a2350a0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HailStorm_8
+      rect:
+        serializedVersion: 2
+        x: 1080
+        y: 1080
+        width: 540
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de803da80ad48fb48803549ef2a78204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HailStorm_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 720
+        width: 540
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4d7bf8f1618f8f4c81b8becd8c9985e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HailStorm_10
+      rect:
+        serializedVersion: 2
+        x: 540
+        y: 720
+        width: 540
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8e362200be9bfa48b0a26c04cc7f980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HailStorm_11
+      rect:
+        serializedVersion: 2
+        x: 1080
+        y: 720
+        width: 540
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b21ef829fff5dec4ba648aab91020a93
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HailStorm_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 360
+        width: 540
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 631f5f388fd6b714898b96ab0ebd3380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HailStorm_13
+      rect:
+        serializedVersion: 2
+        x: 540
+        y: 360
+        width: 540
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f9aae8e950ae204181d4857afb4596b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HailStorm_14
+      rect:
+        serializedVersion: 2
+        x: 1080
+        y: 360
+        width: 540
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 677d5e884cd2def40b3a3376989d1e33
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HailStorm_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 540
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b26603bdc99d7049b78fd2a09cb5319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HailStorm_16
+      rect:
+        serializedVersion: 2
+        x: 540
+        y: 0
+        width: 540
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8344b02681978d04bad50e164aaf20d4
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HailStorm_17
+      rect:
+        serializedVersion: 2
+        x: 1080
+        y: 0
+        width: 540
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c24ef3311678aa4f8ca77f0f142b702
       vertices: []
       indices: 
       edges: []

@@ -33,6 +33,7 @@ public class GrimmoireController : MonoBehaviour
         updatePreparedSpellText(null);
         SpellRangeOverlay.Instance.disableSpellOverlay();
         ControllerManager.Instance.getCursorChangerController().resetMouse();
+        Player.Instance.setManaTextBalloon(false);
     }
 
     //Cancel Current Prepared Spell
@@ -319,6 +320,7 @@ public class GrimmoireController : MonoBehaviour
             Player.Instance.setCastingAnimation(2);
             ControllerManager.Instance.getScreenShakeController().screenShake(0.3f, 0.5f);
             ControllerManager.Instance.getScreenFlashController().flashScreen(0.8f);
+            ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().thunderClip);
 
             //Spawn Lightning
             ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.lightningStrikeSpell, affectedArea[0]);
@@ -460,6 +462,7 @@ public class GrimmoireController : MonoBehaviour
             //Juicyness
             ControllerManager.Instance.getScreenShakeController().screenShake(0.3f, 0.5f);
             ControllerManager.Instance.getScreenFlashController().flashScreen(0.8f);
+            ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().thunderClip);
 
             //Spawn Lightning
             ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.superboltSpell, affectedArea[0]);
@@ -552,7 +555,7 @@ public class GrimmoireController : MonoBehaviour
             ControllerManager.Instance.getScreenFlashController().flashScreen(1f);
 
             //Activate Hail Storm
-            ControllerManager.Instance.getSpellEffectController().activateHailStorm(1000f, 1f);
+            ControllerManager.Instance.getSpellEffectController().activateHailStorm(10f, 1f);
         }
         #endregion
         #region Typhoon
@@ -582,6 +585,7 @@ public class GrimmoireController : MonoBehaviour
 
             //Spawn Lightning
             ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.lightningStrikeSpell, affectedArea[0]);
+            ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().thunderClip);
 
             //Check for Puddles
             EnvironmentCondition affectedTile = ControllerManager.Instance.getEnvironmentController().getEnvironmentCondition(affectedArea[0]);

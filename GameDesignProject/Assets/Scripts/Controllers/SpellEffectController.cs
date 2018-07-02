@@ -23,12 +23,8 @@ public class SpellEffectController : MonoBehaviour
     public GameObject hurricane;
     public GameObject fireStorm;
 
-    //Rain Control References
-    public RuntimeAnimatorController rainAnimationController;
-    public RuntimeAnimatorController hailStormAnimationController;
-    public GameObject rain;
-
     //Rain Control Variables
+    public GameObject rain;
     private ActivePrecipitation currentActivePrecipitation;
     private Animator rainAnimator;
     private float rainDuration;
@@ -101,6 +97,7 @@ public class SpellEffectController : MonoBehaviour
             currentIntervalPoint_Puddles = puddleSpawnInterval;
             rainAnimator.enabled = true;
             rain.SetActive(true);
+            rainAnimator.SetInteger("Type", 0);
 
             //Add Time to All Puddles
             List<Environment> puddles = ControllerManager.Instance.getEnvironmentController().getAllPuddles();
@@ -147,9 +144,9 @@ public class SpellEffectController : MonoBehaviour
             remainingRainDuration = rainDuration;
             puddleSpawnInterval = damageInterval;
             currentIntervalPoint_Puddles = damageInterval;
-            rainAnimator.runtimeAnimatorController = hailStormAnimationController;
             rainAnimator.enabled = true;
             rain.SetActive(true);
+            rainAnimator.SetInteger("Type", 1);
         }
     }
 
@@ -200,11 +197,10 @@ public class SpellEffectController : MonoBehaviour
             }
 
             //Check for Rain Time
-            if (remainingRainDuration <= 0.9f) rainAnimator.SetTrigger("Advance");
-            if(remainingRainDuration <= 0f)
+            if (remainingRainDuration <= 1f) rainAnimator.SetTrigger("Advance");
+            if (remainingRainDuration <= 0f)
             {
                 rain.SetActive(false);
-                rainAnimator.runtimeAnimatorController = rainAnimationController;
                 rainAnimator.enabled = false;
                 currentActivePrecipitation = ActivePrecipitation.None;
             }
