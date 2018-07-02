@@ -628,8 +628,6 @@ public class GrimmoireController : MonoBehaviour
         ControllerManager.Instance.getCursorChangerController().resetMouse();
     }
 
-
-
     // Update is called once per frame
     void Update ()
     {

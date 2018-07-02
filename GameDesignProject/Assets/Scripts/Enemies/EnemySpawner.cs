@@ -120,6 +120,13 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    //Get Random Lane
+    public Vector2 getRandomLane()
+    {
+        shuffleLaneList();
+        return lanes[0];
+    }
+
     // Update is called once per frame
     void Update ()
     {

@@ -52,8 +52,11 @@ public class Player : MonoBehaviour
     //On Mouse Click
     private void OnMouseDown()
     {
-        SpellRangeOverlay.Instance.disableSpellOverlay();
-        CastRunes.Instance.enableCastRunes();
+        if(enabled)
+        {
+            SpellRangeOverlay.Instance.disableSpellOverlay();
+            CastRunes.Instance.enableCastRunes();
+        }
     }
 
     //Set Mana Text Balloon
@@ -87,11 +90,12 @@ public class Player : MonoBehaviour
                 
                 if (hit[i].distance < 1f && !ControllerManager.Instance.getDevourerController().isActive())
                 {
+                    alert.SetActive(false);
                     ControllerManager.Instance.getGrimmoireController().resetPreparedSpells();
                     CastRunes.Instance.disableCastRunes();
-                    ControllerManager.Instance.getCorruptionController().gainCorruption(20);
                     ControllerManager.Instance.getDevourerController().activateDevourer();
                     ControllerManager.Instance.getManaController().spendMana(ControllerManager.Instance.getManaController().getCurrentMana());
+                    ControllerManager.Instance.getCorruptionController().gainCorruption(20);
                 }
             }
         }

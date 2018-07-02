@@ -27,10 +27,10 @@ public class SpellEffectController : MonoBehaviour
     public RuntimeAnimatorController rainAnimationController;
     public RuntimeAnimatorController hailStormAnimationController;
     public GameObject rain;
-    public Animator rainAnimator;
 
     //Rain Control Variables
     private ActivePrecipitation currentActivePrecipitation;
+    private Animator rainAnimator;
     private float rainDuration;
     private float remainingRainDuration;
     private float thunderStormDuration;
