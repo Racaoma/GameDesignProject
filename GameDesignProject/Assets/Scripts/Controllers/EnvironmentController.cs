@@ -126,28 +126,28 @@ public class EnvironmentController : MonoBehaviour
 
                 //UP
                 int tileNumber = ((int)(position.y + 6f) * width) + (int)(position.x + 9f);
-                if (insideArea(tileNumber) && (tiles[tileNumber].GetComponent<Environment>().currentEnvironmentCondition == EnvironmentCondition.Puddle || tiles[tileNumber].GetComponent<Environment>().currentEnvironmentCondition == EnvironmentCondition.Shock))
+                if (insideArea(tileNumber) && (tiles[tileNumber].GetComponent<Environment>().currentEnvironmentCondition == EnvironmentCondition.Puddle || tiles[tileNumber].GetComponent<Environment>().currentEnvironmentCondition == EnvironmentCondition.PuddleAndShock))
                 {
                     if(!intermediaryList.Contains(tiles[tileNumber].transform.position)) intermediaryList.AddLast(tiles[tileNumber].transform.position);
                 }
 
                 //DOWN
                 tileNumber = ((int)(position.y + 4f) * width) + (int)(position.x + 9f);
-                if (insideArea(tileNumber) && (tiles[tileNumber].GetComponent<Environment>().currentEnvironmentCondition == EnvironmentCondition.Puddle || tiles[tileNumber].GetComponent<Environment>().currentEnvironmentCondition == EnvironmentCondition.Shock))
+                if (insideArea(tileNumber) && (tiles[tileNumber].GetComponent<Environment>().currentEnvironmentCondition == EnvironmentCondition.Puddle || tiles[tileNumber].GetComponent<Environment>().currentEnvironmentCondition == EnvironmentCondition.PuddleAndShock))
                 {
                     if (!intermediaryList.Contains(tiles[tileNumber].transform.position)) intermediaryList.AddLast(tiles[tileNumber].transform.position);
                 }
 
                 //LEFT
                 tileNumber = ((int)(position.y + 5f) * width) + (int)(position.x + 8f);
-                if (insideArea(tileNumber) && (tiles[tileNumber].GetComponent<Environment>().currentEnvironmentCondition == EnvironmentCondition.Puddle || tiles[tileNumber].GetComponent<Environment>().currentEnvironmentCondition == EnvironmentCondition.Shock))
+                if (insideArea(tileNumber) && (tiles[tileNumber].GetComponent<Environment>().currentEnvironmentCondition == EnvironmentCondition.Puddle || tiles[tileNumber].GetComponent<Environment>().currentEnvironmentCondition == EnvironmentCondition.PuddleAndShock))
                 {
                     if (!intermediaryList.Contains(tiles[tileNumber].transform.position)) intermediaryList.AddLast(tiles[tileNumber].transform.position);
                 }
 
                 //RIGHT
                 tileNumber = ((int)(position.y + 5f) * width) + (int)(position.x + 10f);
-                if (insideArea(tileNumber) && (tiles[tileNumber].GetComponent<Environment>().currentEnvironmentCondition == EnvironmentCondition.Puddle || tiles[tileNumber].GetComponent<Environment>().currentEnvironmentCondition == EnvironmentCondition.Shock))
+                if (insideArea(tileNumber) && (tiles[tileNumber].GetComponent<Environment>().currentEnvironmentCondition == EnvironmentCondition.Puddle || tiles[tileNumber].GetComponent<Environment>().currentEnvironmentCondition == EnvironmentCondition.PuddleAndShock))
                 {
                     if (!intermediaryList.Contains(tiles[tileNumber].transform.position)) intermediaryList.AddLast(tiles[tileNumber].transform.position);
                 }

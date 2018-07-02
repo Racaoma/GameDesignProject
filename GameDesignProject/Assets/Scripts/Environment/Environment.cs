@@ -8,7 +8,8 @@ public enum EnvironmentCondition
     Puddle,
     Ice,
     Fire,
-    Shock
+    Shock,
+    PuddleAndShock
 };
 
 public class Environment : MonoBehaviour
@@ -68,7 +69,8 @@ public class Environment : MonoBehaviour
         }
         else if(condition == EnvironmentCondition.Shock)
         {
-            currentEnvironmentCondition = EnvironmentCondition.Shock;
+            if (currentEnvironmentCondition == EnvironmentCondition.Puddle) currentEnvironmentCondition = EnvironmentCondition.PuddleAndShock;
+            else currentEnvironmentCondition = EnvironmentCondition.Shock;
             GameObject obj = ControllerManager.Instance.getSpellEffectController().spawnShockEffect(this.transform.position);
             obj.transform.parent = this.gameObject.transform;
             remainingConditionTime = ControllerManager.Instance.getEnvironmentController().shockDuration + additionalTime;
@@ -96,6 +98,12 @@ public class Environment : MonoBehaviour
                     remainingConditionTime = ControllerManager.Instance.getEnvironmentController().puddleDuration;
                 }
                 else if (currentEnvironmentCondition == EnvironmentCondition.Shock)
+                {
+                    currentEnvironmentCondition = EnvironmentCondition.None;
+                    Destroy(this.transform.GetChild(0).gameObject);
+                    remainingConditionTime = 0f;
+                }
+                else if (currentEnvironmentCondition == EnvironmentCondition.PuddleAndShock)
                 {
                     currentEnvironmentCondition = EnvironmentCondition.Puddle;
                     Destroy(this.transform.GetChild(0).gameObject);

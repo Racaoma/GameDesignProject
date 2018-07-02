@@ -19,6 +19,18 @@ public class GrimmoireController : MonoBehaviour
     public Sprite tornadoIcon;
     public Sprite summonRainIcon;
     public Sprite cleanseIcon;
+    public Sprite deepFreezeIcon;
+    public Sprite hellFireIcon;
+    public Sprite superboltIcon;
+    public Sprite hurricaneIcon;
+    public Sprite cloudburstIcon;
+    public Sprite purifyIcon;
+    public Sprite thunderStormIcon;
+    public Sprite hailStormIcon;
+    public Sprite typhoonIcon;
+    public Sprite superCellIcon;
+    public Sprite fireStormIcon;
+    public Sprite blizzardIcon;
 
     //Variables
     private Spell preparedSpell1;
@@ -320,14 +332,14 @@ public class GrimmoireController : MonoBehaviour
             Player.Instance.setCastingAnimation(2);
             ControllerManager.Instance.getScreenShakeController().screenShake(0.3f, 0.5f);
             ControllerManager.Instance.getScreenFlashController().flashScreen(0.8f);
-            ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().thunderClip);
+            ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().thunderClip2);
 
             //Spawn Lightning
             ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.lightningStrikeSpell, affectedArea[0]);
 
             //Check for Puddles
             EnvironmentCondition affectedTile = ControllerManager.Instance.getEnvironmentController().getEnvironmentCondition(affectedArea[0]);
-            if (affectedTile == EnvironmentCondition.Puddle || affectedTile == EnvironmentCondition.Shock)
+            if (affectedTile == EnvironmentCondition.Puddle || affectedTile == EnvironmentCondition.PuddleAndShock)
             {
                 Vector2[] affectedTiles = ControllerManager.Instance.getEnvironmentController().getConnectedPuddles(affectedArea[0]);
                 for (int i = 0; i < affectedTiles.Length; i++)
@@ -363,7 +375,6 @@ public class GrimmoireController : MonoBehaviour
         {
             //Animate
             Player.Instance.setCastingAnimation(4);
-            ControllerManager.Instance.getScreenShakeController().screenShake(0.2f, 0.2f);
             ControllerManager.Instance.getScreenFlashController().flashScreen(1f);
 
             //Activate Rain
@@ -433,7 +444,7 @@ public class GrimmoireController : MonoBehaviour
                 if (affectedArea[i] == (Vector2)Player.Instance.gameObject.transform.position) continue;
 
                 //Spawn Fire
-                ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.hellFireSpell, affectedArea[i]);
+                ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.fireBlastSpell, affectedArea[i]);
 
                 //Check for Affected Enemies
                 Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea[i], new Vector2(0.95f, 0.95f), 0f);
@@ -462,7 +473,7 @@ public class GrimmoireController : MonoBehaviour
             //Juicyness
             ControllerManager.Instance.getScreenShakeController().screenShake(0.3f, 0.5f);
             ControllerManager.Instance.getScreenFlashController().flashScreen(0.8f);
-            ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().thunderClip);
+            ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().thunderClip1);
 
             //Spawn Lightning
             ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.superboltSpell, affectedArea[0]);
@@ -484,6 +495,15 @@ public class GrimmoireController : MonoBehaviour
             for(int i = 0; i < adjacent.Count; i++)
             {
                 ControllerManager.Instance.getEnvironmentController().setEnvironmentCondition(adjacent[i], EnvironmentCondition.Shock);
+                affectedTile = ControllerManager.Instance.getEnvironmentController().getEnvironmentCondition(adjacent[i]);
+                if (affectedTile == EnvironmentCondition.Puddle || affectedTile == EnvironmentCondition.PuddleAndShock)
+                {
+                    Vector2[] affectedTiles = ControllerManager.Instance.getEnvironmentController().getConnectedPuddles(adjacent[i]);
+                    for (int j = 0; j < affectedTiles.Length; j++)
+                    {
+                        ControllerManager.Instance.getEnvironmentController().setEnvironmentCondition(affectedTiles[j], EnvironmentCondition.Shock);
+                    }
+                }
             }
 
             //Check for Affected Enemies
@@ -513,7 +533,6 @@ public class GrimmoireController : MonoBehaviour
         {
             //Animate
             Player.Instance.setCastingAnimation(4);
-            ControllerManager.Instance.getScreenShakeController().screenShake(0.2f, 0.2f);
             ControllerManager.Instance.getScreenFlashController().flashScreen(1f);
 
             //Activate Rain
@@ -528,7 +547,7 @@ public class GrimmoireController : MonoBehaviour
             ControllerManager.Instance.getScreenFlashController().flashScreen(3f);
 
             //Spawn Effect
-            ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.purifySpell, Vector2.zero);
+            ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.cleanseSpell, Vector2.zero);
 
             //Heal!
             ControllerManager.Instance.getCorruptionController().gainCorruption(SpellDatabase.purifySpell.damage);
@@ -540,7 +559,6 @@ public class GrimmoireController : MonoBehaviour
             //Animate
             Player.Instance.setCastingAnimation(2);
             ControllerManager.Instance.getScreenFlashController().flashScreen(3f);
-            ControllerManager.Instance.getScreenShakeController().screenShake(0.1f, 0.5f);
 
             //Activate Rain
             ControllerManager.Instance.getSpellEffectController().activateThunderStorm(10f, 1f, 1.5f);
@@ -585,7 +603,7 @@ public class GrimmoireController : MonoBehaviour
 
             //Spawn Lightning
             ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.lightningStrikeSpell, affectedArea[0]);
-            ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().thunderClip);
+            ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().thunderClip1);
 
             //Check for Puddles
             EnvironmentCondition affectedTile = ControllerManager.Instance.getEnvironmentController().getEnvironmentCondition(affectedArea[0]);

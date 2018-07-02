@@ -5,11 +5,14 @@ using UnityEngine.UI;
 
 public class CorruptionController : MonoBehaviour
 {
-    //Varibles
-    private int corruption;
+    //References
     public Text corruptionText;
     public RuntimeAnimatorController corruptAnimationController;
     public GameObject devourerGameOver;
+    public GameObject corruptionParticles;
+
+    //Varibles
+    private int corruption;
     private bool gameOver;
     private bool walkAway;
     private GameObject player;
@@ -70,6 +73,12 @@ public class CorruptionController : MonoBehaviour
 
         //Debug
         Debug.Log("Current Corruption: " + corruption);
+    }
+
+    //Spawn Corruption Particles
+    public void spawnCorruptionParticles(Vector2 position)
+    {
+        Instantiate(corruptionParticles, position, Quaternion.identity);
     }
 
     //Update Method

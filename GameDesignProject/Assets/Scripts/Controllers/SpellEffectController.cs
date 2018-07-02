@@ -111,6 +111,7 @@ public class SpellEffectController : MonoBehaviour
             currentActivePrecipitation = ActivePrecipitation.Rain;
             this.rainDuration = rainDuration;
             remainingRainDuration = rainDuration;
+            if (puddleSpawnInterval < this.puddleSpawnInterval) this.puddleSpawnInterval = puddleSpawnInterval;
 
             //Add Time to All Puddles
             List<Environment> puddles = ControllerManager.Instance.getEnvironmentController().getAllPuddles();
@@ -188,8 +189,31 @@ public class SpellEffectController : MonoBehaviour
                         ControllerManager.Instance.getScreenFlashController().flashScreen(3f);
                         ControllerManager.Instance.getScreenShakeController().screenShake(0.1f, 0.5f);
                         Vector2 randomPosition = new Vector2(Random.Range(-7.9f, 7.9f), Random.Range(-4.9f, 3.9f));
-                        spawnEffect(SpellDatabase.lightningStrikeSpell, randomPosition);
+                        Vector2 affectedArea = SpellRangeOverlay.Instance.getAffectedAreaByPoint(randomPosition);
+                        spawnEffect(SpellDatabase.lightningStrikeSpell, affectedArea);
+                        ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().thunderClip2);
                         currentIntervalPoint_Lightning = lightningSpawnInterval;
+
+                        //Check for Puddles
+                        EnvironmentCondition affectedTile = ControllerManager.Instance.getEnvironmentController().getEnvironmentCondition(affectedArea);
+                        if (affectedTile == EnvironmentCondition.Puddle || affectedTile == EnvironmentCondition.PuddleAndShock)
+                        {
+                            Vector2[] affectedTiles = ControllerManager.Instance.getEnvironmentController().getConnectedPuddles(affectedArea);
+                            for (int i = 0; i < affectedTiles.Length; i++)
+                            {
+                                ControllerManager.Instance.getEnvironmentController().setEnvironmentCondition(affectedTiles[i], EnvironmentCondition.Shock);
+                            }
+                        }
+
+                        //Check for Affected Enemies
+                        Collider2D[] collisions = Physics2D.OverlapBoxAll(affectedArea, new Vector2(0.95f, 0.95f), 0f);
+                        for (int j = 0; j < collisions.Length; j++)
+                        {
+                            if (collisions[j].gameObject.CompareTag("Enemy"))
+                            {
+                                collisions[j].gameObject.GetComponent<Enemy>().takeDamage(SpellDatabase.lightningStrikeSpell.damage);
+                            }
+                        }
                     }
                     else currentIntervalPoint_Lightning -= Time.deltaTime;
                     thunderStormDuration -= Time.deltaTime;

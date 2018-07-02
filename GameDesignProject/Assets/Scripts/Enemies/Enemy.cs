@@ -73,17 +73,28 @@ public class Enemy : MonoBehaviour
     }
 
     //Take Damage
-    public void takeDamage(int damage)
+    public bool takeDamage(int damage)
     {   
         currentHitPoints -= damage;
         healthBar.fillAmount = (float) currentHitPoints / (float) maxHitPoints;
-        if (currentHitPoints <= 0) killEnemy();
+        if (currentHitPoints <= 0)
+        {
+            killEnemy();
+            return true;
+        }
+        else return false;
     }
 
     //Enemy Arrived at Destination
     public void retireEnemy()
     {
-        ControllerManager.Instance.getCorruptionController().gainCorruption(spawnCost);
+        if(!ControllerManager.Instance.getCorruptionController().isGameOver())
+        {
+            ControllerManager.Instance.getCorruptionController().gainCorruption(spawnCost);
+            ControllerManager.Instance.getCorruptionController().spawnCorruptionParticles(this.transform.position);
+        }
+
+        //Finally...
         killEnemy();
     }
 
@@ -165,7 +176,7 @@ public class Enemy : MonoBehaviour
                 currentIntervalPoint -= Time.deltaTime;
                 if (currentIntervalPoint <= 0f)
                 {
-                    takeDamage(ControllerManager.Instance.getConditionController().ablazeDamage);
+                    if(takeDamage(ControllerManager.Instance.getConditionController().ablazeDamage)) return;
                     currentIntervalPoint = ControllerManager.Instance.getConditionController().ablazeDamageInterval;
                 }
             }
@@ -189,7 +200,7 @@ public class Enemy : MonoBehaviour
                 stunGrace = ControllerManager.Instance.getConditionController().stunnedDuration + 2f;
                 return;
             }
-            else if(condition == EnvironmentCondition.Shock)
+            else if(condition == EnvironmentCondition.Shock || condition == EnvironmentCondition.PuddleAndShock)
             {
                 setCondition(Condition.Shocked, ControllerManager.Instance.getConditionController().shockedDuration);
                 return;

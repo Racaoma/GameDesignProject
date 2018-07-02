@@ -72,11 +72,7 @@ public class SpellRangeOverlay : MonoBehaviour
             resetSpellOverlay();
 
             //Check Area Type
-            if (areaType == SpellAreaType.Square)
-            {
-                //TODO
-            }
-            else if (areaType == SpellAreaType.Circle || areaType == SpellAreaType.Cross)
+            if (areaType == SpellAreaType.Circle || areaType == SpellAreaType.Cross)
             {
                 //Make Center
                 GameObject obj = this.transform.GetChild((verticalCell * width) + horizontalCell).gameObject;
@@ -173,6 +169,14 @@ public class SpellRangeOverlay : MonoBehaviour
 
         //Finally...
         return affectedArea;
+    }
+
+    //Get Affected Area by Point
+    public Vector2 getAffectedAreaByPoint(Vector2 point)
+    {
+        int horizontalCell = ((int)(point.x + 9f));
+        int verticalCell = ((int)(point.y + 5f));
+        return this.transform.GetChild((verticalCell * width) + horizontalCell).transform.position;
     }
 
     //Disable Spell Overlay
