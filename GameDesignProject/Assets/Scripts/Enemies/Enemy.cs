@@ -24,6 +24,7 @@ public class Enemy : MonoBehaviour
     public int spawnCost;
     public Action<GameObject> onDeathAction;
     private Vector2 target;
+    private AudioSource audioSource;
 
     //Damage Control
     private int currentHitPoints;
@@ -41,6 +42,7 @@ public class Enemy : MonoBehaviour
     //Start Method
     private void Start()
     {
+        audioSource = this.GetComponent<AudioSource>();
         resetInternalVariables();
         GameObject child = this.transform.GetChild(0).gameObject;
         conditionAnimator = child.GetComponent<Animator>();
@@ -104,11 +106,25 @@ public class Enemy : MonoBehaviour
         onDeathAction = null;
     }
 
+    //Play Sound
+    private void playSound(AudioClip audio)
+    {
+        audioSource.clip = audio;
+        audioSource.Play();
+    }
+
     //Set Condition Method
     public void setCondition(Condition condition, float time, float speedFactor = 1f)
     {
         //Check for Condition Anullments
-        if((currentCondition == Condition.Frozen && condition == Condition.Ablaze) || (currentCondition == Condition.Ablaze && condition == Condition.Frozen))
+        if (currentCondition == Condition.Ablaze && condition == Condition.Frozen)
+        {
+            playSound(ControllerManager.Instance.getSoundController().extinguish);
+            ControllerManager.Instance.getEnvironmentController().setEnvironmentCondition(this.transform.position, EnvironmentCondition.Puddle);
+            clearConditions();
+            return;
+        }
+        else if(currentCondition == Condition.Frozen && condition == Condition.Ablaze)
         {
             ControllerManager.Instance.getEnvironmentController().setEnvironmentCondition(this.transform.position, EnvironmentCondition.Puddle);
             clearConditions();
@@ -134,6 +150,7 @@ public class Enemy : MonoBehaviour
                     conditionAnimator.runtimeAnimatorController = ControllerManager.Instance.getConditionController().shockedAnimation;
                     break;
                 case Condition.Ablaze:
+                    playSound(ControllerManager.Instance.getSoundController().ablaze);
                     conditionAnimator.runtimeAnimatorController = ControllerManager.Instance.getConditionController().ablazeAnimation;
                     currentIntervalPoint = ControllerManager.Instance.getConditionController().ablazeDamageInterval;
                     break;
@@ -149,8 +166,10 @@ public class Enemy : MonoBehaviour
     {
         //Check for After-Effects
         if (remainingConditionTime <= 0f && currentCondition == Condition.Frozen) ControllerManager.Instance.getEnvironmentController().setEnvironmentCondition(this.transform.position, EnvironmentCondition.Puddle);
+        else if(remainingConditionTime <= 0f && currentCondition == Condition.Ablaze) audioSource.PlayOneShot(ControllerManager.Instance.getSoundController().extinguish);
 
         //Reset Conditions
+        audioSource.clip = null;
         speedFactor = 1f;
         currentCondition = Condition.None;
         conditionAnimator.runtimeAnimatorController = null;

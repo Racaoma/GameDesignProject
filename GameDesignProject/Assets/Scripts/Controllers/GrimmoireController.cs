@@ -293,6 +293,7 @@ public class GrimmoireController : MonoBehaviour
             //Animate
             Player.Instance.setCastingAnimation(1);
             ControllerManager.Instance.getScreenShakeController().screenShake(0.1f, 0.2f);
+            ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().fireClip);
 
             //Iterate Affected Area
             List<Enemy> affectedEnemies = new List<Enemy>();
@@ -432,6 +433,7 @@ public class GrimmoireController : MonoBehaviour
             //Animate
             Player.Instance.setCastingAnimation(1);
             ControllerManager.Instance.getScreenShakeController().screenShake(0.2f, 0.3f);
+            ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().fireClip);
 
             //Iterate Affected Area
             List<Enemy> affectedEnemies = new List<Enemy>();

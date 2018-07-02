@@ -10,6 +10,15 @@ public class CorruptionController : MonoBehaviour
     public RuntimeAnimatorController corruptAnimationController;
     public GameObject devourerGameOver;
     public GameObject corruptionParticles;
+    public Image portrait;
+
+    //Portrait References
+    public Sprite spriteCorruption0;
+    public Sprite spriteCorruption20;
+    public Sprite spriteCorruption40;
+    public Sprite spriteCorruption60;
+    public Sprite spriteCorruption80;
+    public Sprite spriteCorruption100;
 
     //Varibles
     private int corruption;
@@ -68,11 +77,38 @@ public class CorruptionController : MonoBehaviour
         if(value >= 0) corruption = Mathf.Min(corruption + value, 100);
         else corruption = Mathf.Max(corruption + value, 0);
 
-        //Check if Corruption >= 100
-        if (corruption >= 100f && !gameOver) triggerGameOver();
-
-        //Debug
-        Debug.Log("Current Corruption: " + corruption);
+        //Change Feedback
+        if (corruption < 20)
+        {
+            corruptionText.text = "0";
+            portrait.sprite = spriteCorruption0;
+        }
+        else if (corruption >= 20 && corruption < 40)
+        {
+            corruptionText.text = "5";
+            portrait.sprite = spriteCorruption20;
+        }
+        else if (corruption >= 40 && corruption < 60)
+        {
+            corruptionText.text = "10";
+            portrait.sprite = spriteCorruption40;
+        }
+        else if (corruption >= 60 && corruption < 80)
+        {
+            corruptionText.text = "15";
+            portrait.sprite = spriteCorruption60;
+        }
+        else if (corruption >= 80 && corruption < 100)
+        {
+            corruptionText.text = "20";
+            portrait.sprite = spriteCorruption80;
+        }
+        else if (corruption >= 100 && !gameOver)
+        {
+            corruptionText.text = "66";
+            portrait.sprite = spriteCorruption100;
+            triggerGameOver();
+        }
     }
 
     //Spawn Corruption Particles
