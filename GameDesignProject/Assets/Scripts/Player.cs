@@ -96,6 +96,9 @@ public class Player : MonoBehaviour
                     ControllerManager.Instance.getDevourerController().activateDevourer();
                     ControllerManager.Instance.getManaController().spendMana(ControllerManager.Instance.getManaController().getCurrentMana());
                     ControllerManager.Instance.getCorruptionController().gainCorruption(20);
+                    ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().devourerClip);
+                    ControllerManager.Instance.getScreenShakeController().screenShake(0.2f, 0.2f);
+                    ControllerManager.Instance.getScreenFlashController().flashBlackScreen(2f);
                 }
             }
         }

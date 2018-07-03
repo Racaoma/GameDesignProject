@@ -157,38 +157,63 @@ public class GrimmoireController : MonoBehaviour
                 if (preparedSpell1.name == SpellName.FlashFreeze)
                 {
                     if (newSpell.name == SpellName.FlashFreeze || newSpell.name == SpellName.Tornado || newSpell.name == SpellName.SummonRain) preparedSpell2 = newSpell;
-                    else resetPreparedSpells();
+                    else
+                    {
+                        ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().comboFailClip);
+                        resetPreparedSpells();
+                    }
                 }
                 else if (preparedSpell1.name == SpellName.FireBlast)
                 {
                     if (newSpell.name == SpellName.FireBlast || newSpell.name == SpellName.Tornado) preparedSpell2 = newSpell;
-                    else resetPreparedSpells();
+                    else
+                    {
+                        ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().comboFailClip);
+                        resetPreparedSpells();
+                    }
                 }
                 else if (preparedSpell1.name == SpellName.LightningStrike)
                 {
                     if (newSpell.name == SpellName.LightningStrike || newSpell.name == SpellName.Tornado || newSpell.name == SpellName.SummonRain) preparedSpell2 = newSpell;
-                    else resetPreparedSpells();
+                    else
+                    {
+                        ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().comboFailClip);
+                        resetPreparedSpells();
+                    }
                 }
                 else if (preparedSpell1.name == SpellName.Tornado)
                 {
                     if (newSpell.name == SpellName.Tornado || newSpell.name == SpellName.FlashFreeze || newSpell.name == SpellName.FireBlast || newSpell.name == SpellName.LightningStrike || newSpell.name == SpellName.SummonRain) preparedSpell2 = newSpell;
-                    else resetPreparedSpells();
+                    else
+                    {
+                        ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().comboFailClip);
+                        resetPreparedSpells();
+                    }
                 }
                 else if (preparedSpell1.name == SpellName.SummonRain)
                 {
                     if (newSpell.name == SpellName.SummonRain || newSpell.name == SpellName.FlashFreeze || newSpell.name == SpellName.LightningStrike || newSpell.name == SpellName.Tornado) preparedSpell2 = newSpell;
-                    else resetPreparedSpells();
+                    else
+                    {
+                        ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().comboFailClip);
+                        resetPreparedSpells();
+                    }
                 }
                 else if (preparedSpell1.name == SpellName.Cleanse)
                 {
                     if (newSpell.name == SpellName.Cleanse) preparedSpell2 = newSpell;
-                    else resetPreparedSpells();
+                    else
+                    {
+                        ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().comboFailClip);
+                        resetPreparedSpells();
+                    }
                 }
 
                 //Update Grimmoire Icon
                 if (preparedSpell2 != null) updateGrimmoireIcon(1, newSpell.name);
             }
         }
+        else ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().drawfailClip);
     }
 
     //Get Prepared Spell According to Prepared Spell 1 & 2
@@ -262,6 +287,7 @@ public class GrimmoireController : MonoBehaviour
             //Animate
             Player.Instance.setCastingAnimation(0);
             ControllerManager.Instance.getScreenFlashController().flashScreen(2f);
+            ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().flashFreezeClip);
 
             //Iterate Affected Area
             List<Enemy> affectedEnemies = new List<Enemy>();
@@ -403,6 +429,7 @@ public class GrimmoireController : MonoBehaviour
             //Animate
             Player.Instance.setCastingAnimation(0);
             ControllerManager.Instance.getScreenFlashController().flashScreen(2f);
+            ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().flashFreezeClip);
 
             //Iterate Affected Area
             List<Enemy> affectedEnemies = new List<Enemy>();

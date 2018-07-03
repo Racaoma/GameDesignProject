@@ -58,7 +58,8 @@ public class CorruptionController : MonoBehaviour
         else if (corruption >= 20 && corruption < 40) return 5;
         else if (corruption >= 40 && corruption < 60) return 10;
         else if (corruption >= 60 && corruption < 80) return 15;
-        else return 20;
+        else if (corruption >= 80 && corruption < 100) return 20;
+        else return 66;
     }
 
     //Trigger Game Over
@@ -69,13 +70,21 @@ public class CorruptionController : MonoBehaviour
         ControllerManager.Instance.getScreenFlashController().flashBlackScreen(1f);
         Player.Instance.enabled = false;
         player.GetComponent<Animator>().runtimeAnimatorController = corruptAnimationController;
+        ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().corruptClip);
+        ControllerManager.Instance.getSoundController().playSoundLoop(ControllerManager.Instance.getSoundController().darkbellClip);
+        ControllerManager.Instance.getSoundController().fadeMusic();
     }
 
     //Gain Corruption
     public void gainCorruption(int value)
     {
-        if(value >= 0) corruption = Mathf.Min(corruption + value, 100);
+        int lastCorruptionBonus = getCorruptionBonuses();
+        if (value >= 0) corruption = Mathf.Min(corruption + value, 100);
         else corruption = Mathf.Max(corruption + value, 0);
+
+        //Flash Black Screen is Corruption Achieved New Levels
+        int currentCorruptionBonus = getCorruptionBonuses(); ;
+        if ((currentCorruptionBonus != 66) && (currentCorruptionBonus > lastCorruptionBonus)) ControllerManager.Instance.getScreenFlashController().flashBlackScreen(2f);
 
         //Change Feedback
         if (corruption < 20)
