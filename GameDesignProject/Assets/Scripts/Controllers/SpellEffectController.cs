@@ -103,6 +103,8 @@ public class SpellEffectController : MonoBehaviour
             rainAnimator.SetTrigger("Start");
             rainAnimator.ResetTrigger("Advance");
             rainSprite.color = new Color(1f, 1f, 1f, 1f);
+            audioSource.clip = ControllerManager.Instance.getSoundController().rainClip;
+            audioSource.Play();
 
             //Add Time to All Puddles
             List<Environment> puddles = ControllerManager.Instance.getEnvironmentController().getAllPuddles();
@@ -154,6 +156,8 @@ public class SpellEffectController : MonoBehaviour
             rainAnimator.SetTrigger("Start");
             rainAnimator.ResetTrigger("Advance");
             rainSprite.color = new Color(1f, 1f, 1f, 1f);
+            audioSource.clip = ControllerManager.Instance.getSoundController().hailClip;
+            audioSource.Play();
         }
     }
 
@@ -263,6 +267,9 @@ public class SpellEffectController : MonoBehaviour
                 }
             }
 
+            //Check Sounds
+            if (!audioSource.isPlaying && remainingRainDuration >= 3f) audioSource.Play();
+
             //Check for Rain Time
             if (remainingRainDuration <= 1f) rainAnimator.SetTrigger("Advance");
             if (remainingRainDuration <= 0f)
@@ -271,6 +278,20 @@ public class SpellEffectController : MonoBehaviour
                 currentActivePrecipitation = ActivePrecipitation.None;
             }
             else remainingRainDuration -= Time.deltaTime;
+        }
+        else
+        {
+            //No Precipitation
+            if (audioSource.isPlaying)
+            {
+                if (audioSource.volume == 0f)
+                {
+                    audioSource.Stop();
+                    audioSource.volume = 1f;
+                }
+                else audioSource.volume -= 0.3f * Time.deltaTime;
+            }
+            else if (audioSource.volume < 1f) audioSource.volume = 1f;
         }
     }
 }

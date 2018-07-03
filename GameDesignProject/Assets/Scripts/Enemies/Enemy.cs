@@ -58,6 +58,7 @@ public class Enemy : MonoBehaviour
     //Reset Internal Variables Method
     private void resetInternalVariables()
     {
+        if(audioSource != null) audioSource.clip = null;
         speedFactor = 1f;
         currentIntervalPoint = 0f;
         healthBar.fillAmount = 1f;
@@ -109,8 +110,11 @@ public class Enemy : MonoBehaviour
     //Play Sound
     private void playSound(AudioClip audio)
     {
-        audioSource.clip = audio;
-        audioSource.Play();
+        if(audioSource != null)
+        {
+            audioSource.clip = audio;
+            audioSource.Play();
+        }
     }
 
     //Set Condition Method
@@ -126,6 +130,7 @@ public class Enemy : MonoBehaviour
         }
         else if(currentCondition == Condition.Frozen && condition == Condition.Ablaze)
         {
+            playSound(ControllerManager.Instance.getSoundController().shatteringClip);
             ControllerManager.Instance.getEnvironmentController().setEnvironmentCondition(this.transform.position, EnvironmentCondition.Puddle);
             clearConditions();
             return;
@@ -141,6 +146,7 @@ public class Enemy : MonoBehaviour
             switch (condition)
             {
                 case Condition.Frozen:
+                    playSound(ControllerManager.Instance.getSoundController().frezingClip);
                     conditionAnimator.runtimeAnimatorController = ControllerManager.Instance.getConditionController().frozenAnimation;
                     break;
                 case Condition.Stunned:
@@ -165,11 +171,14 @@ public class Enemy : MonoBehaviour
     public void clearConditions()
     {
         //Check for After-Effects
-        if (remainingConditionTime <= 0f && currentCondition == Condition.Frozen) ControllerManager.Instance.getEnvironmentController().setEnvironmentCondition(this.transform.position, EnvironmentCondition.Puddle);
-        else if(remainingConditionTime <= 0f && currentCondition == Condition.Ablaze) audioSource.PlayOneShot(ControllerManager.Instance.getSoundController().extinguishClip);
+        if (remainingConditionTime <= 0f && currentCondition == Condition.Frozen)
+        {
+            playSound(ControllerManager.Instance.getSoundController().shatteringClip);
+            ControllerManager.Instance.getEnvironmentController().setEnvironmentCondition(this.transform.position, EnvironmentCondition.Puddle);
+        }
+        else if (remainingConditionTime <= 0f && currentCondition == Condition.Ablaze) audioSource.PlayOneShot(ControllerManager.Instance.getSoundController().extinguishClip);
 
         //Reset Conditions
-        audioSource.clip = null;
         speedFactor = 1f;
         currentCondition = Condition.None;
         conditionAnimator.runtimeAnimatorController = null;

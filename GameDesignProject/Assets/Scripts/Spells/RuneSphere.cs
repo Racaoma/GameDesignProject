@@ -24,7 +24,11 @@ public class RuneSphere : MonoBehaviour
     //Trigger Sphere Method
     public void triggerSphere()
     {
-        if (castRunes.activatePath(this.gameObject)) animator.enabled = true;
+        if (castRunes.activatePath(this.gameObject) && animator.enabled == false)
+        {
+            ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().runeSphereActivateClip);
+            animator.enabled = true;
+        }
     }
 
     //Reset Method

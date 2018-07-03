@@ -379,7 +379,7 @@ public class GrimmoireController : MonoBehaviour
             ControllerManager.Instance.getScreenFlashController().flashScreen(1f);
 
             //Activate Rain
-            ControllerManager.Instance.getSpellEffectController().activateRain(10f, 1f);
+            ControllerManager.Instance.getSpellEffectController().activateRain(16f, 1f);
         }
         #endregion
         #region Cleanse
@@ -388,6 +388,7 @@ public class GrimmoireController : MonoBehaviour
             //Animate
             Player.Instance.setCastingAnimation(5);
             ControllerManager.Instance.getScreenFlashController().flashScreen(3f);
+            ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().cleanseClip);
 
             //Spawn Effect
             ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.cleanseSpell, Vector2.zero);
@@ -517,6 +518,19 @@ public class GrimmoireController : MonoBehaviour
                     collisions[j].gameObject.GetComponent<Enemy>().takeDamage(SpellDatabase.superboltSpell.damage);
                 }
             }
+
+            //Check for Enemies in Adjacent Tiles
+            for(int i = 0; i < adjacent.Count; i++)
+            {
+                collisions = Physics2D.OverlapBoxAll(adjacent[i], new Vector2(0.95f, 0.95f), 0f);
+                for (int j = 0; j < collisions.Length; j++)
+                {
+                    if (collisions[j].gameObject.CompareTag("Enemy"))
+                    {
+                        collisions[j].gameObject.GetComponent<Enemy>().takeDamage(10);
+                    }
+                }
+            }
         }
         #endregion
         #region Hurricane
@@ -538,7 +552,7 @@ public class GrimmoireController : MonoBehaviour
             ControllerManager.Instance.getScreenFlashController().flashScreen(1f);
 
             //Activate Rain
-            ControllerManager.Instance.getSpellEffectController().activateRain(15f, 0.5f);
+            ControllerManager.Instance.getSpellEffectController().activateRain(16f, 0.5f);
         }
         #endregion
         #region Purify
@@ -547,6 +561,7 @@ public class GrimmoireController : MonoBehaviour
             //Animate
             Player.Instance.setCastingAnimation(5);
             ControllerManager.Instance.getScreenFlashController().flashScreen(3f);
+            ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().purifyClip);
 
             //Spawn Effect
             ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.cleanseSpell, Vector2.zero);

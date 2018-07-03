@@ -13,6 +13,11 @@ public class SoundController : MonoBehaviour
     public AudioClip frezingClip;
     public AudioClip shatteringClip;
     public AudioClip blizzardClip;
+    public AudioClip cleanseClip;
+    public AudioClip purifyClip;
+    public AudioClip runeSphereActivateClip;
+    public AudioClip rainClip;
+    public AudioClip hailClip;
 
     //Audio Source Reference
     public AudioSource audioSource;
