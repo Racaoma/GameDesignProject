@@ -641,6 +641,17 @@ public class GrimmoireController : MonoBehaviour
             ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.fireStormSpell, new Vector2(affectedArea[0].x - 0.1f, affectedArea[0].y + 0.3f));
         }
         #endregion
+        #region Blizzard
+        else if (preparedSpell.name == SpellName.Blizzard)
+        {
+            //Animate
+            Player.Instance.setCastingAnimation(3);
+            ControllerManager.Instance.getScreenFlashController().whiteOut(10f, 1f);
+
+            //Activate Hail Storm
+            ControllerManager.Instance.getSpellEffectController().activateBlizzard(10f, 0.5f);
+        }
+        #endregion
 
         //Reset Prepared Spells
         resetPreparedSpells();

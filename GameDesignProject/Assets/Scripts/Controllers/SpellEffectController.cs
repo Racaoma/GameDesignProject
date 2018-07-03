@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum ActivePrecipitation
 {
@@ -8,7 +9,7 @@ public enum ActivePrecipitation
     Rain,
     ThunderStorm,
     HailStorm,
-    Typhoon
+    Blizzard
 };
 
 public class SpellEffectController : MonoBehaviour
@@ -24,7 +25,9 @@ public class SpellEffectController : MonoBehaviour
     public GameObject fireStorm;
 
     //Rain Control Variables
+    public AudioSource audioSource;
     public GameObject rain;
+    private Image rainSprite;
     private ActivePrecipitation currentActivePrecipitation;
     private Animator rainAnimator;
     private float rainDuration;
@@ -38,8 +41,9 @@ public class SpellEffectController : MonoBehaviour
     //Start Method
     private void Start()
     {
+        rainSprite = rain.GetComponent<Image>();
+        audioSource = rain.GetComponent<AudioSource>();
         rainAnimator = rain.GetComponent<Animator>();
-        rainAnimator.enabled = false;
         currentActivePrecipitation = ActivePrecipitation.None;
         rainDuration = 0f;
         thunderStormDuration = 0f;
@@ -59,7 +63,7 @@ public class SpellEffectController : MonoBehaviour
                 Instantiate(fireEffect, position, Quaternion.identity);
                 break;
             case SpellName.LightningStrike:
-                Instantiate(lightning, new Vector2(position.x, position.y + 4.5f), Quaternion.identity);
+                Instantiate(lightning, new Vector2(position.x, position.y + 5f), Quaternion.identity);
                 break;
             case SpellName.Tornado:
                 Instantiate(tornado, new Vector2(position.x, position.y + 1f), Quaternion.identity);
@@ -68,7 +72,7 @@ public class SpellEffectController : MonoBehaviour
                 Instantiate(cleanseEffect, cleanseEffect.transform.position, Quaternion.identity);
                 break;
             case SpellName.Superbolt:
-                Instantiate(superbolt, new Vector2(position.x, position.y + 4.5f), Quaternion.identity);
+                Instantiate(superbolt, new Vector2(position.x, position.y + 5f), Quaternion.identity);
                 break;
             case SpellName.Hurricane:
                 Instantiate(hurricane, new Vector2(position.x, position.y + 1f), Quaternion.identity);
@@ -95,9 +99,10 @@ public class SpellEffectController : MonoBehaviour
             this.puddleSpawnInterval = puddleSpawnInterval;
             remainingRainDuration = rainDuration;
             currentIntervalPoint_Puddles = puddleSpawnInterval;
-            rainAnimator.enabled = true;
-            rain.SetActive(true);
             rainAnimator.SetInteger("Type", 0);
+            rainAnimator.SetTrigger("Start");
+            rainAnimator.ResetTrigger("Advance");
+            rainSprite.color = new Color(1f, 1f, 1f, 1f);
 
             //Add Time to All Puddles
             List<Environment> puddles = ControllerManager.Instance.getEnvironmentController().getAllPuddles();
@@ -106,7 +111,7 @@ public class SpellEffectController : MonoBehaviour
                 puddles[x].addTime(rainDuration);
             }
         }
-        else if(currentActivePrecipitation == ActivePrecipitation.ThunderStorm || currentActivePrecipitation == ActivePrecipitation.Typhoon || currentActivePrecipitation == ActivePrecipitation.Rain)
+        else if(currentActivePrecipitation == ActivePrecipitation.ThunderStorm || currentActivePrecipitation == ActivePrecipitation.Rain)
         {
             currentActivePrecipitation = ActivePrecipitation.Rain;
             this.rainDuration = rainDuration;
@@ -125,7 +130,7 @@ public class SpellEffectController : MonoBehaviour
     //Activate Thunder Storm
     public void activateThunderStorm(float rainDuration, float puddleSpawnInterval, float lightningSpawnInterval)
     {
-        if (currentActivePrecipitation != ActivePrecipitation.HailStorm)
+        if (currentActivePrecipitation != ActivePrecipitation.HailStorm && currentActivePrecipitation != ActivePrecipitation.Blizzard)
         {
             activateRain(rainDuration, puddleSpawnInterval);
             currentActivePrecipitation = ActivePrecipitation.ThunderStorm;
@@ -145,9 +150,32 @@ public class SpellEffectController : MonoBehaviour
             remainingRainDuration = rainDuration;
             puddleSpawnInterval = damageInterval;
             currentIntervalPoint_Puddles = damageInterval;
-            rainAnimator.enabled = true;
-            rain.SetActive(true);
             rainAnimator.SetInteger("Type", 1);
+            rainAnimator.SetTrigger("Start");
+            rainAnimator.ResetTrigger("Advance");
+            rainSprite.color = new Color(1f, 1f, 1f, 1f);
+        }
+    }
+
+    //Activate Blizzard
+    public void activateBlizzard(float duration, float slowInterval)
+    {
+        if (currentActivePrecipitation == ActivePrecipitation.None || currentActivePrecipitation == ActivePrecipitation.Blizzard)
+        {
+            if (currentActivePrecipitation == ActivePrecipitation.None)
+            {
+                audioSource.clip = ControllerManager.Instance.getSoundController().blizzardClip;
+                audioSource.Play();
+            }
+            currentActivePrecipitation = ActivePrecipitation.Blizzard;
+            rainDuration = duration;
+            remainingRainDuration = rainDuration;
+            puddleSpawnInterval = slowInterval;
+            currentIntervalPoint_Puddles = slowInterval;
+            rainAnimator.SetInteger("Type", 2);
+            rainAnimator.SetTrigger("Start");
+            rainAnimator.ResetTrigger("Advance");
+            rainSprite.color = new Color(1f, 1f, 1f, 1f);
         }
     }
 
@@ -165,6 +193,20 @@ public class SpellEffectController : MonoBehaviour
                     for(int i = 0; i < enemies.Count; i++)
                     {
                         enemies[i].GetComponent<Enemy>().takeDamage(SpellDatabase.hailStormSpell.damage);
+                    }
+                    currentIntervalPoint_Puddles = puddleSpawnInterval;
+                }
+                else currentIntervalPoint_Puddles -= Time.deltaTime;
+            }
+            else if(currentActivePrecipitation == ActivePrecipitation.Blizzard)
+            {
+                //Check for Slow Interval
+                if (currentIntervalPoint_Puddles <= 0f)
+                {
+                    List<GameObject> enemies = ControllerManager.Instance.getEnemySpawner().getActiveEnemies();
+                    for (int i = 0; i < enemies.Count; i++)
+                    {
+                        enemies[i].GetComponent<Enemy>().setCondition(Condition.Slowed, 1f, 0.5f);
                     }
                     currentIntervalPoint_Puddles = puddleSpawnInterval;
                 }
@@ -191,6 +233,7 @@ public class SpellEffectController : MonoBehaviour
                         Vector2 randomPosition = new Vector2(Random.Range(-7.9f, 7.9f), Random.Range(-4.9f, 3.9f));
                         Vector2 affectedArea = SpellRangeOverlay.Instance.getAffectedAreaByPoint(randomPosition);
                         spawnEffect(SpellDatabase.lightningStrikeSpell, affectedArea);
+
                         ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().thunderClip2);
                         currentIntervalPoint_Lightning = lightningSpawnInterval;
 
@@ -224,8 +267,7 @@ public class SpellEffectController : MonoBehaviour
             if (remainingRainDuration <= 1f) rainAnimator.SetTrigger("Advance");
             if (remainingRainDuration <= 0f)
             {
-                rain.SetActive(false);
-                rainAnimator.enabled = false;
+                rainSprite.color = new Color(1f, 1f, 1f, 0f);
                 currentActivePrecipitation = ActivePrecipitation.None;
             }
             else remainingRainDuration -= Time.deltaTime;

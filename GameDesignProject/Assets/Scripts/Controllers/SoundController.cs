@@ -8,8 +8,11 @@ public class SoundController : MonoBehaviour
     public AudioClip thunderClip1;
     public AudioClip thunderClip2;
     public AudioClip fireClip;
-    public AudioClip ablaze;
-    public AudioClip extinguish;
+    public AudioClip ablazeClip;
+    public AudioClip extinguishClip;
+    public AudioClip frezingClip;
+    public AudioClip shatteringClip;
+    public AudioClip blizzardClip;
 
     //Audio Source Reference
     public AudioSource audioSource;
