@@ -620,7 +620,7 @@ public class GrimmoireController : MonoBehaviour
 
             //Spawn Lightning
             ControllerManager.Instance.getSpellEffectController().spawnEffect(SpellDatabase.lightningStrikeSpell, affectedArea[0]);
-            ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().thunderClip1);
+            ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().thunderClip2);
 
             //Check for Puddles
             EnvironmentCondition affectedTile = ControllerManager.Instance.getEnvironmentController().getEnvironmentCondition(affectedArea[0]);

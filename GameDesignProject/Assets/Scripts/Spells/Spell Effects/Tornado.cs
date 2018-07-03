@@ -12,6 +12,7 @@ public class Tornado : MonoBehaviour
     //Internal Variables
     public SpriteRenderer ringAreaSpriteRenderer;
     public bool fireStorm;
+    private AudioSource audioSource;
     private Vector2 pivotCenter;
     private float currentIntervalPoint;
     private float remainingDuration;
@@ -19,6 +20,7 @@ public class Tornado : MonoBehaviour
     //Start Method
     private void Start()
     {
+        audioSource = this.GetComponent<AudioSource>();
         ringAreaSpriteRenderer.transform.localScale = (Vector2.one * range) / this.transform.localScale.x;
         currentIntervalPoint = 0f;
         remainingDuration = duration;
@@ -31,6 +33,9 @@ public class Tornado : MonoBehaviour
         if (remainingDuration <= 0f) Destroy(this.gameObject);
         else
         {
+            //Fadeout Audio
+            if (remainingDuration <= 2f) audioSource.volume -= 0.5f * Time.deltaTime;
+
             //Check Damage Interval
             if (currentIntervalPoint <= 0f)
             {
