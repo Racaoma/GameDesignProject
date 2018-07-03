@@ -11,6 +11,7 @@ public class CorruptionController : MonoBehaviour
     public GameObject devourerGameOver;
     public GameObject corruptionParticles;
     public Image portrait;
+    public GameObject gameOverPanel;
 
     //Portrait References
     public Sprite spriteCorruption0;
@@ -27,6 +28,7 @@ public class CorruptionController : MonoBehaviour
     private GameObject player;
     private float devourerSpawnTime;
     private float currentSpawnInterval;
+    private Vector2 target;
 
     //Start Method
     private void Start()
@@ -37,6 +39,7 @@ public class CorruptionController : MonoBehaviour
         player = Player.Instance.gameObject;
         devourerSpawnTime = 5f;
         currentSpawnInterval = devourerSpawnTime;
+        target = new Vector2(-9.5f, player.transform.position.y);
     }
 
     //Get Current Corruption
@@ -121,9 +124,10 @@ public class CorruptionController : MonoBehaviour
     }
 
     //Spawn Corruption Particles
-    public void spawnCorruptionParticles(Vector2 position)
+    public void spawnCorruptionParticles(Vector2 position, int corruptionVal)
     {
-        Instantiate(corruptionParticles, position, Quaternion.identity);
+        GameObject obj = Instantiate(corruptionParticles, position, Quaternion.identity);
+        obj.GetComponent<CorruptionParticles>().setCorruption(corruptionVal);
     }
 
     //Update Method
@@ -133,7 +137,9 @@ public class CorruptionController : MonoBehaviour
         {
             if (walkAway)
             {
-                player.transform.position = Vector2.MoveTowards(player.transform.position, new Vector2(-9.5f, this.transform.position.y), Time.deltaTime * 0.3f);
+                player.transform.position = Vector2.MoveTowards(player.transform.position, target, Time.deltaTime * 0.3f);
+                if (((Vector2)player.transform.position - target) == Vector2.zero) gameOverPanel.SetActive(true);
+                
                 if (currentSpawnInterval <= 0f)
                 {
                     Vector2 laneStart = ControllerManager.Instance.getEnemySpawner().getRandomLane();

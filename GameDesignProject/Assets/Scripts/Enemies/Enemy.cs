@@ -91,13 +91,7 @@ public class Enemy : MonoBehaviour
     //Enemy Arrived at Destination
     public void retireEnemy()
     {
-        if(!ControllerManager.Instance.getCorruptionController().isGameOver())
-        {
-            ControllerManager.Instance.getCorruptionController().gainCorruption(spawnCost);
-            ControllerManager.Instance.getCorruptionController().spawnCorruptionParticles(this.transform.position);
-        }
-
-        //Finally...
+        if(!ControllerManager.Instance.getCorruptionController().isGameOver())  ControllerManager.Instance.getCorruptionController().spawnCorruptionParticles(this.transform.position, spawnCost);
         killEnemy();
     }
 
