@@ -8,11 +8,13 @@ public class GrimmoireController : MonoBehaviour
     //References
     public Image preparedSpell1_Image;
     public Image preparedSpell2_Image;
+    public Image preparedSpellFinal_Image;
     public Text preparedSpellText;
 
     //Spell Icons
     public Sprite defaultRune1;
     public Sprite defaultRune2;
+    public Sprite defaultRune3;
     public Sprite flashFreezeIcon;
     public Sprite fireBlastIcon;
     public Sprite lightningStrikeIcon;
@@ -41,8 +43,7 @@ public class GrimmoireController : MonoBehaviour
     {
         preparedSpell1 = null;
         preparedSpell2 = null;
-        resetGrimmoireIcons();
-        updatePreparedSpellText(null);
+        updateGrimmoireFeedback(null);
         SpellRangeOverlay.Instance.disableSpellOverlay();
         ControllerManager.Instance.getCursorChangerController().resetMouse();
         Player.Instance.setManaTextBalloon(false);
@@ -59,29 +60,6 @@ public class GrimmoireController : MonoBehaviour
         else resetPreparedSpells();
     }
 
-    //Update Grimmoire to Spell Icon
-    private void updateGrimmoireIcon(int pos, SpellName newSpell)
-    {
-        if(pos == 0)
-        {
-            if (newSpell == SpellName.FlashFreeze) preparedSpell1_Image.sprite = flashFreezeIcon;
-            else if (newSpell == SpellName.FireBlast) preparedSpell1_Image.sprite = fireBlastIcon;
-            else if (newSpell == SpellName.LightningStrike) preparedSpell1_Image.sprite = lightningStrikeIcon;
-            else if (newSpell == SpellName.Tornado) preparedSpell1_Image.sprite = tornadoIcon;
-            else if (newSpell == SpellName.SummonRain) preparedSpell1_Image.sprite = summonRainIcon;
-            else if (newSpell == SpellName.Cleanse) preparedSpell1_Image.sprite = cleanseIcon;
-        }
-        else
-        {
-            if (newSpell == SpellName.FlashFreeze) preparedSpell2_Image.sprite = flashFreezeIcon;
-            else if (newSpell == SpellName.FireBlast) preparedSpell2_Image.sprite = fireBlastIcon;
-            else if (newSpell == SpellName.LightningStrike) preparedSpell2_Image.sprite = lightningStrikeIcon;
-            else if (newSpell == SpellName.Tornado) preparedSpell2_Image.sprite = tornadoIcon;
-            else if (newSpell == SpellName.SummonRain) preparedSpell2_Image.sprite = summonRainIcon;
-            else if (newSpell == SpellName.Cleanse) preparedSpell2_Image.sprite = cleanseIcon;
-        }
-    }
-
     //Reset Grimmoire
     private void resetGrimmoireIcons()
     {
@@ -90,54 +68,211 @@ public class GrimmoireController : MonoBehaviour
     }
 
     //Update Prepared Spell Text
-    public void updatePreparedSpellText(Spell spell)
+    public void updateGrimmoireFeedback(Spell preparedSpell)
     {
-        if (spell == null) preparedSpellText.text = "No Spell Prepared";
+        if (preparedSpell == null)
+        {
+            preparedSpell1_Image.sprite = defaultRune1;
+            preparedSpell2_Image.sprite = defaultRune2;
+            preparedSpellFinal_Image.sprite = defaultRune3;
+            preparedSpellText.text = "No Spell Prepared";
+        }
         else
         {
             int corruptionBonus = ControllerManager.Instance.getCorruptionController().getCorruptionBonuses();
-            int manaCost = spell.manaCost - corruptionBonus;
-            if(corruptionBonus == 0)
+            int manaCost = preparedSpell.manaCost - corruptionBonus;
+
+            if (preparedSpell.name == SpellName.FlashFreeze)
             {
-                if (spell.name == SpellName.FlashFreeze) preparedSpellText.text = "Flash Freeze\nMana Cost = " + manaCost;
-                else if (spell.name == SpellName.FireBlast) preparedSpellText.text = "Fire Blast\nMana Cost = " + manaCost;
-                else if (spell.name == SpellName.LightningStrike) preparedSpellText.text = "Lightning Strike\nMana Cost = " + manaCost;
-                else if (spell.name == SpellName.Tornado) preparedSpellText.text = "Tornado\nMana Cost = " + manaCost;
-                else if (spell.name == SpellName.SummonRain) preparedSpellText.text = "Summon Rain\nMana Cost = " + manaCost;
-                else if (spell.name == SpellName.Cleanse) preparedSpellText.text = "Cleanse\nMana Cost = " + manaCost;
-                else if (spell.name == SpellName.DeepFreeze) preparedSpellText.text = "Deep Freeze\nMana Cost = " + manaCost;
-                else if (spell.name == SpellName.Hellfire) preparedSpellText.text = "Hell Fire\nMana Cost = " + manaCost;
-                else if (spell.name == SpellName.Superbolt) preparedSpellText.text = "Superbolt\nMana Cost = " + manaCost;
-                else if (spell.name == SpellName.Hurricane) preparedSpellText.text = "Hurricane\nMana Cost = " + manaCost;
-                else if (spell.name == SpellName.Cloudburst) preparedSpellText.text = "Cloudburst\nMana Cost = " + manaCost;
-                else if (spell.name == SpellName.Purify) preparedSpellText.text = "Purify\nMana Cost = " + manaCost;
-                else if (spell.name == SpellName.ThunderStorm) preparedSpellText.text = "Thunder Storm\nMana Cost = " + manaCost;
-                else if (spell.name == SpellName.HailStorm) preparedSpellText.text = "Hail Storm\nMana Cost = " + manaCost;
-                else if (spell.name == SpellName.Typhoon) preparedSpellText.text = "Typhoon\nMana Cost = " + manaCost;
-                else if (spell.name == SpellName.SuperCell) preparedSpellText.text = "Super Cell\nMana Cost = " + manaCost;
-                else if (spell.name == SpellName.FireStorm) preparedSpellText.text = "Fire Storm\nMana Cost = " + manaCost;
-                else if (spell.name == SpellName.Blizzard) preparedSpellText.text = "Blizzard\nMana Cost = " + manaCost;
+                preparedSpell1_Image.sprite = flashFreezeIcon;
+                preparedSpell2_Image.sprite = defaultRune2;
+                preparedSpellFinal_Image.sprite = flashFreezeIcon;
+                if (corruptionBonus == 0) preparedSpellText.text = "Flash Freeze\nMana Cost = " + manaCost;
+                else preparedSpellText.text = "Flash Freeze\nMana Cost = <color=maroon>" + manaCost + "</color>";
             }
-            else
+            else if (preparedSpell.name == SpellName.FireBlast)
             {
-                if (spell.name == SpellName.FlashFreeze) preparedSpellText.text = "Flash Freeze\nMana Cost = <color=maroon>" + manaCost + "</color>";
-                else if (spell.name == SpellName.FireBlast) preparedSpellText.text = "Fire Blast\nMana Cost = <color=maroon>" + manaCost + "</color>";
-                else if (spell.name == SpellName.LightningStrike) preparedSpellText.text = "Lightning Strike\nMana Cost = <color=maroon>" + manaCost + "</color>";
-                else if (spell.name == SpellName.Tornado) preparedSpellText.text = "Tornado\nMana Cost = <color=maroon>" + manaCost + "</color>";
-                else if (spell.name == SpellName.SummonRain) preparedSpellText.text = "Summon Rain\nMana Cost = <color=maroon>" + manaCost + "</color>";
-                else if (spell.name == SpellName.Cleanse) preparedSpellText.text = "Cleanse\nMana Cost = <color=maroon>" + manaCost + "</color>";
-                else if (spell.name == SpellName.DeepFreeze) preparedSpellText.text = "Deep Freeze\nMana Cost = <color=maroon>" + manaCost + "</color>";
-                else if (spell.name == SpellName.Hellfire) preparedSpellText.text = "Hell Fire\nMana Cost = <color=maroon>" + manaCost + "</color>";
-                else if (spell.name == SpellName.Superbolt) preparedSpellText.text = "Superbolt\nMana Cost = <color=maroon>" + manaCost + "</color>";
-                else if (spell.name == SpellName.Hurricane) preparedSpellText.text = "Hurricane\nMana Cost = <color=maroon>" + manaCost + "</color>";
-                else if (spell.name == SpellName.Cloudburst) preparedSpellText.text = "Cloudburst\nMana Cost = <color=maroon>" + manaCost + "</color>";
-                else if (spell.name == SpellName.Purify) preparedSpellText.text = "Purify\nMana Cost = <color=maroon>" + manaCost + "</color>";
-                else if (spell.name == SpellName.ThunderStorm) preparedSpellText.text = "Thunder Storm\nMana Cost = <color=maroon>" + manaCost + "</color>";
-                else if (spell.name == SpellName.HailStorm) preparedSpellText.text = "Hail Storm\nMana Cost = <color=maroon>" + manaCost + "</color>";
-                else if (spell.name == SpellName.Typhoon) preparedSpellText.text = "Typhoon\nMana Cost = <color=maroon>" + manaCost + "</color>";
-                else if (spell.name == SpellName.SuperCell) preparedSpellText.text = "Super Cell\nMana Cost = <color=maroon>" + manaCost + "</color>";
-                else if (spell.name == SpellName.FireStorm) preparedSpellText.text = "Fire Storm\nMana Cost = <color=maroon>" + manaCost + "</color>";
-                else if (spell.name == SpellName.Blizzard) preparedSpellText.text = "Blizzard\nMana Cost = <color=maroon>" + manaCost + "</color>";
+                preparedSpell1_Image.sprite = fireBlastIcon;
+                preparedSpell2_Image.sprite = defaultRune2;
+                preparedSpellFinal_Image.sprite = fireBlastIcon;
+                if (corruptionBonus == 0) preparedSpellText.text = "Fire Blast\nMana Cost = " + manaCost;
+                else preparedSpellText.text = "Fire Blast\nMana Cost = <color=maroon>" + manaCost + "</color>";
+            }
+            else if (preparedSpell.name == SpellName.LightningStrike)
+            {
+                preparedSpell1_Image.sprite = lightningStrikeIcon;
+                preparedSpell2_Image.sprite = defaultRune2;
+                preparedSpellFinal_Image.sprite = lightningStrikeIcon;
+                if (corruptionBonus == 0) preparedSpellText.text = "Lightning Strike\nMana Cost = " + manaCost;
+                else preparedSpellText.text = "Lightning Strike\nMana Cost = <color=maroon>" + manaCost + "</color>";
+            }
+            else if (preparedSpell.name == SpellName.Tornado)
+            {
+                preparedSpell1_Image.sprite = tornadoIcon;
+                preparedSpell2_Image.sprite = defaultRune2;
+                preparedSpellFinal_Image.sprite = tornadoIcon;
+                if (corruptionBonus == 0) preparedSpellText.text = "Tornado\nMana Cost = " + manaCost;
+                else preparedSpellText.text = "Tornado\nMana Cost = <color=maroon>" + manaCost + "</color>";
+            }
+            else if (preparedSpell.name == SpellName.SummonRain)
+            {
+                preparedSpell1_Image.sprite = summonRainIcon;
+                preparedSpell2_Image.sprite = defaultRune2;
+                preparedSpellFinal_Image.sprite = summonRainIcon;
+                if (corruptionBonus == 0) preparedSpellText.text = "Summon Rain\nMana Cost = " + manaCost;
+                else preparedSpellText.text = "Summon Rain\nMana Cost = <color=maroon>" + manaCost + "</color>";
+            }
+            else if (preparedSpell.name == SpellName.Cleanse)
+            {
+                preparedSpell1_Image.sprite = cleanseIcon;
+                preparedSpell2_Image.sprite = defaultRune2;
+                preparedSpellFinal_Image.sprite = cleanseIcon;
+                if (corruptionBonus == 0) preparedSpellText.text = "Cleanse\nMana Cost = " + manaCost;
+                else preparedSpellText.text = "Cleanse\nMana Cost = <color=maroon>" + manaCost + "</color>";
+            }
+            else if (preparedSpell.name == SpellName.DeepFreeze)
+            {
+                preparedSpell1_Image.sprite = flashFreezeIcon;
+                preparedSpell2_Image.sprite = flashFreezeIcon;
+                preparedSpellFinal_Image.sprite = deepFreezeIcon;
+                if (corruptionBonus == 0) preparedSpellText.text = "Deep Freeze\nMana Cost = " + manaCost;
+                else preparedSpellText.text = "Deep Freeze\nMana Cost = <color=maroon>" + manaCost + "</color>";
+            }
+            else if (preparedSpell.name == SpellName.Hellfire)
+            {
+                preparedSpell1_Image.sprite = fireBlastIcon;
+                preparedSpell2_Image.sprite = fireBlastIcon;
+                preparedSpellFinal_Image.sprite = hellFireIcon;
+                if (corruptionBonus == 0) preparedSpellText.text = "Hell Fire\nMana Cost = " + manaCost;
+                else preparedSpellText.text = "Hell Fire\nMana Cost = <color=maroon>" + manaCost + "</color>";
+            }
+            else if (preparedSpell.name == SpellName.Superbolt)
+            {
+                preparedSpell1_Image.sprite = lightningStrikeIcon;
+                preparedSpell2_Image.sprite = lightningStrikeIcon;
+                preparedSpellFinal_Image.sprite = superboltIcon;
+                if (corruptionBonus == 0) preparedSpellText.text = "Superbolt\nMana Cost = " + manaCost;
+                else preparedSpellText.text = "Superbolt\nMana Cost = <color=maroon>" + manaCost + "</color>";
+            }
+            else if (preparedSpell.name == SpellName.Hurricane)
+            {
+                preparedSpell1_Image.sprite = tornadoIcon;
+                preparedSpell2_Image.sprite = tornadoIcon;
+                preparedSpellFinal_Image.sprite = hurricaneIcon;
+                if (corruptionBonus == 0) preparedSpellText.text = "Hurricane\nMana Cost = " + manaCost;
+                else preparedSpellText.text = "Hurricane\nMana Cost = <color=maroon>" + manaCost + "</color>";
+            }
+            else if (preparedSpell.name == SpellName.Cloudburst)
+            {
+                preparedSpell1_Image.sprite = summonRainIcon;
+                preparedSpell2_Image.sprite = summonRainIcon;
+                preparedSpellFinal_Image.sprite = cloudburstIcon;
+                if (corruptionBonus == 0) preparedSpellText.text = "Cloudburst\nMana Cost = " + manaCost;
+                else preparedSpellText.text = "Cloudburst\nMana Cost = <color=maroon>" + manaCost + "</color>";
+            }
+            else if (preparedSpell.name == SpellName.Purify)
+            {
+                preparedSpell1_Image.sprite = cleanseIcon;
+                preparedSpell2_Image.sprite = cleanseIcon;
+                preparedSpellFinal_Image.sprite = purifyIcon;
+                if (corruptionBonus == 0) preparedSpellText.text = "Purify\nMana Cost = " + manaCost;
+                else preparedSpellText.text = "Purify\nMana Cost = <color=maroon>" + manaCost + "</color>";
+            }
+            else if (preparedSpell.name == SpellName.ThunderStorm)
+            {
+                if(preparedSpell1.name == SpellName.LightningStrike)
+                {
+                    preparedSpell1_Image.sprite = lightningStrikeIcon;
+                    preparedSpell2_Image.sprite = summonRainIcon;
+                }
+                else
+                {
+                    preparedSpell1_Image.sprite = summonRainIcon;
+                    preparedSpell2_Image.sprite = lightningStrikeIcon;
+                }
+                preparedSpellFinal_Image.sprite = thunderStormIcon;
+                if (corruptionBonus == 0) preparedSpellText.text = "Thunder Storm\nMana Cost = " + manaCost;
+                else preparedSpellText.text = "Thunder Storm\nMana Cost = <color=maroon>" + manaCost + "</color>";
+            }
+            else if (preparedSpell.name == SpellName.HailStorm)
+            {
+                if (preparedSpell1.name == SpellName.SummonRain)
+                {
+                    preparedSpell1_Image.sprite = summonRainIcon;
+                    preparedSpell2_Image.sprite = flashFreezeIcon;
+                }
+                else
+                {
+                    preparedSpell1_Image.sprite = flashFreezeIcon;
+                    preparedSpell2_Image.sprite = summonRainIcon;
+                }
+                preparedSpellFinal_Image.sprite = hailStormIcon;
+                if (corruptionBonus == 0) preparedSpellText.text = "Hail Storm\nMana Cost = " + manaCost;
+                else preparedSpellText.text = "Hail Storm\nMana Cost = <color=maroon>" + manaCost + "</color>";
+            }
+            else if (preparedSpell.name == SpellName.Typhoon)
+            {
+                if (preparedSpell1.name == SpellName.SummonRain)
+                {
+                    preparedSpell1_Image.sprite = summonRainIcon;
+                    preparedSpell2_Image.sprite = tornadoIcon;
+                }
+                else
+                {
+                    preparedSpell1_Image.sprite = tornadoIcon;
+                    preparedSpell2_Image.sprite = summonRainIcon;
+                }
+                preparedSpellFinal_Image.sprite = typhoonIcon;
+                if (corruptionBonus == 0) preparedSpellText.text = "Typhoon\nMana Cost = " + manaCost;
+                else preparedSpellText.text = "Typhoon\nMana Cost = <color=maroon>" + manaCost + "</color>";
+            }
+            else if (preparedSpell.name == SpellName.SuperCell)
+            {
+                if (preparedSpell1.name == SpellName.LightningStrike)
+                {
+                    preparedSpell1_Image.sprite = lightningStrikeIcon;
+                    preparedSpell2_Image.sprite = tornadoIcon;
+                }
+                else
+                {
+                    preparedSpell1_Image.sprite = tornadoIcon;
+                    preparedSpell2_Image.sprite = lightningStrikeIcon;
+                }
+                preparedSpellFinal_Image.sprite = superCellIcon;
+                if (corruptionBonus == 0) preparedSpellText.text = "Super Cell\nMana Cost = " + manaCost;
+                else preparedSpellText.text = "Super Cell\nMana Cost = <color=maroon>" + manaCost + "</color>";
+            }
+            else if (preparedSpell.name == SpellName.FireStorm)
+            {
+                if (preparedSpell1.name == SpellName.FireBlast)
+                {
+                    preparedSpell1_Image.sprite = fireBlastIcon;
+                    preparedSpell2_Image.sprite = tornadoIcon;
+                }
+                else
+                {
+                    preparedSpell1_Image.sprite = tornadoIcon;
+                    preparedSpell2_Image.sprite = fireBlastIcon;
+                }
+                preparedSpellFinal_Image.sprite = fireStormIcon;
+                if (corruptionBonus == 0) preparedSpellText.text = "Fire Storm\nMana Cost = " + manaCost;
+                else preparedSpellText.text = "Fire Storm\nMana Cost = <color=maroon>" + manaCost + "</color>";
+            }
+            else if (preparedSpell.name == SpellName.Blizzard)
+            {
+                if (preparedSpell1.name == SpellName.FlashFreeze)
+                {
+                    preparedSpell1_Image.sprite = flashFreezeIcon;
+                    preparedSpell2_Image.sprite = tornadoIcon;
+                }
+                else
+                {
+                    preparedSpell1_Image.sprite = tornadoIcon;
+                    preparedSpell2_Image.sprite = flashFreezeIcon;
+                }
+                preparedSpellFinal_Image.sprite = blizzardIcon;
+                if (corruptionBonus == 0) preparedSpellText.text = "Blizzard\nMana Cost = " + manaCost;
+                else preparedSpellText.text = "Blizzard\nMana Cost = <color=maroon>" + manaCost + "</color>";
             }
         }
     } 
@@ -147,11 +282,7 @@ public class GrimmoireController : MonoBehaviour
     {
         if (newSpell != null)
         {
-            if (preparedSpell1 == null)
-            {
-                preparedSpell1 = newSpell;
-                updateGrimmoireIcon(0, newSpell.name);
-            }
+            if (preparedSpell1 == null) preparedSpell1 = newSpell;
             else
             {
                 if (preparedSpell1.name == SpellName.FlashFreeze)
@@ -208,9 +339,6 @@ public class GrimmoireController : MonoBehaviour
                         resetPreparedSpells();
                     }
                 }
-
-                //Update Grimmoire Icon
-                if (preparedSpell2 != null) updateGrimmoireIcon(1, newSpell.name);
             }
         }
         else ControllerManager.Instance.getSoundController().playSound(ControllerManager.Instance.getSoundController().drawfailClip);
@@ -723,7 +851,7 @@ public class GrimmoireController : MonoBehaviour
                 Player.Instance.setManaTextBalloon(!hasMana);
 
                 //Update Prepared Spell Text
-                updatePreparedSpellText(preparedSpell);
+                updateGrimmoireFeedback(preparedSpell);
 
                 //If Cast Runes is Not Active (i.e. Not Drawing)
                 if (!CastRunes.Instance.isActive())

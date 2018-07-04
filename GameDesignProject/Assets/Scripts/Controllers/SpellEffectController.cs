@@ -25,8 +25,8 @@ public class SpellEffectController : MonoBehaviour
     public GameObject fireStorm;
 
     //Rain Control Variables
-    public AudioSource audioSource;
     public GameObject rain;
+    private AudioSource audioSource;
     private Image rainSprite;
     private ActivePrecipitation currentActivePrecipitation;
     private Animator rainAnimator;

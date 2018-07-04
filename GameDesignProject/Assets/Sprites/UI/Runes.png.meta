@@ -4,6 +4,7 @@ TextureImporter:
   fileIDToRecycleName:
     21300000: Runes_0
     21300002: Runes_1
+    21300004: Runes_2
   externalObjects: {}
   serializedVersion: 5
   mipmaps:
@@ -100,8 +101,8 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
-        height: 64
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -109,7 +110,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d6121b39f0369c542a59dde981a8bfee
+      spriteID: b18d39c3f71f76640a6cd7a13964f4f3
       vertices: []
       indices: 
       edges: []
@@ -118,10 +119,10 @@ TextureImporter:
       name: Runes_1
       rect:
         serializedVersion: 2
-        x: 64
+        x: 48
         y: 0
-        width: 64
-        height: 64
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -129,7 +130,27 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d65cea6031e98a8419fc3951f76f953a
+      spriteID: e88c956b5f6b4c54382d6a5106c6aa63
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Runes_2
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a24682c89fff0ce429068c6ed2135fa0
       vertices: []
       indices: 
       edges: []

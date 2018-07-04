@@ -16,7 +16,7 @@ public static class SpellDatabase
     public static Spell deepFreezeSpell = new Spell(SpellName.DeepFreeze, SpellAreaType.Circle, 3, 40, 0, null);    //Longer Freeze
     public static Spell hellFireSpell = new Spell(SpellName.Hellfire, SpellAreaType.Circle, 3, 45, 15, null);       //Burning Condition
     public static Spell superboltSpell = new Spell(SpellName.Superbolt, SpellAreaType.Circle, 1, 70, 100, null);    //Stun Adjacent
-    public static Spell hurricaneSpell = new Spell(SpellName.Hurricane, SpellAreaType.Circle, 1, 70, 10, null);     //Bigger, More Damaging
+    public static Spell hurricaneSpell = new Spell(SpellName.Hurricane, SpellAreaType.Circle, 1, 70, 5, null);     //Bigger, More Damaging
     public static Spell cloudBurstSpell = new Spell(SpellName.Cloudburst, SpellAreaType.Random, 20, 65, 0, null);   //Generate More Puddles
     public static Spell purifySpell = new Spell(SpellName.Purify, SpellAreaType.All, 1, 65, -10, null);              //Greater Heal
 
@@ -26,7 +26,7 @@ public static class SpellDatabase
     public static Spell typhoonSpell = new Spell(SpellName.Typhoon, SpellAreaType.Circle, 1, 80, 5, null);              //Combined Spells
     public static Spell superCellSpell = new Spell(SpellName.SuperCell, SpellAreaType.Circle, 1, 70, 5, null);          //Combined Spells
     public static Spell fireStormSpell = new Spell(SpellName.FireStorm, SpellAreaType.Circle, 1, 70, 5, null);          //Burning Condition
-    public static Spell blizzardSpell = new Spell(SpellName.Blizzard, SpellAreaType.All, 1, 70, 5, null);               //Greater Slow
+    public static Spell blizzardSpell = new Spell(SpellName.Blizzard, SpellAreaType.All, 1, 70, 0, null);               //Greater Slow
 
     //Spell List to Compare (Basic Spells)
     public static Spell[] spells = { flashFreezeSpell, fireBlastSpell, lightningStrikeSpell, tornadoSpell, summonRainSpell, cleanseSpell };
