@@ -17,11 +17,15 @@ public class Environment : MonoBehaviour
 {
     //Variables
     public EnvironmentCondition currentEnvironmentCondition;
+    private Animator animator;
+    private SpriteRenderer spriteRenderer;
     private float remainingConditionTime;
 
 	// Use this for initialization
 	void Start ()
     {
+        spriteRenderer = this.GetComponent<SpriteRenderer>();
+        animator = this.GetComponent<Animator>();
         currentEnvironmentCondition = EnvironmentCondition.None;
         remainingConditionTime = 0f;
     }
@@ -37,21 +41,25 @@ public class Environment : MonoBehaviour
     {
         if (condition == EnvironmentCondition.Fire)
         {
-            if (currentEnvironmentCondition == EnvironmentCondition.Puddle || currentEnvironmentCondition == EnvironmentCondition.Ice || currentEnvironmentCondition == EnvironmentCondition.PuddleAndShock)
+            if (currentEnvironmentCondition == EnvironmentCondition.Puddle || currentEnvironmentCondition == EnvironmentCondition.Ice)
             {
-                if(currentEnvironmentCondition == EnvironmentCondition.PuddleAndShock) Destroy(this.transform.GetChild(0).gameObject);
+                animator.SetTrigger("Evaporate");
                 currentEnvironmentCondition = EnvironmentCondition.None;
-                this.GetComponent<SpriteRenderer>().sprite = null;
+            }
+            else if (currentEnvironmentCondition == EnvironmentCondition.PuddleAndShock || currentEnvironmentCondition == EnvironmentCondition.IceAndShock)
+            {
+                animator.SetTrigger("Evaporate");
+                currentEnvironmentCondition = EnvironmentCondition.Shock;
             }
         }
         else if (condition == EnvironmentCondition.Ice)
         {
             if (currentEnvironmentCondition == EnvironmentCondition.Puddle || currentEnvironmentCondition == EnvironmentCondition.PuddleAndShock)
             {
-                if (currentEnvironmentCondition == EnvironmentCondition.PuddleAndShock) Destroy(this.transform.GetChild(0).gameObject);
                 currentEnvironmentCondition = EnvironmentCondition.Ice;
-                this.transform.GetComponent<SpriteRenderer>().sprite = ControllerManager.Instance.getEnvironmentController().iceSprite;
+                spriteRenderer.sprite = ControllerManager.Instance.getEnvironmentController().iceSprite;
                 remainingConditionTime = ControllerManager.Instance.getEnvironmentController().iceDuration + additionalTime;
+                animator.SetTrigger("Solodify");
             }
         }
         else if (condition == EnvironmentCondition.Puddle)
@@ -59,16 +67,14 @@ public class Environment : MonoBehaviour
             if (currentEnvironmentCondition == EnvironmentCondition.None)
             {
                 currentEnvironmentCondition = EnvironmentCondition.Puddle;
-                this.transform.GetComponent<SpriteRenderer>().sprite = ControllerManager.Instance.getEnvironmentController().puddleSprite;
-                this.transform.GetComponent<Animator>().enabled = true;
                 remainingConditionTime = ControllerManager.Instance.getEnvironmentController().puddleDuration + additionalTime;
+                animator.SetTrigger("Create");
             }
             if (currentEnvironmentCondition == EnvironmentCondition.Shock)
             {
                 currentEnvironmentCondition = EnvironmentCondition.PuddleAndShock;
-                this.transform.GetComponent<SpriteRenderer>().sprite = ControllerManager.Instance.getEnvironmentController().puddleSprite;
-                this.transform.GetComponent<Animator>().enabled = true;
                 remainingConditionTime = ControllerManager.Instance.getEnvironmentController().shockDuration;
+                animator.SetTrigger("Create");
             }
         }
         else if(condition == EnvironmentCondition.Shock)
@@ -86,7 +92,12 @@ public class Environment : MonoBehaviour
     // Update is called once per frame
     void Update ()
     {
-		if(remainingConditionTime > 0)
+        //Update Sprite & Shock Animation
+        if (currentEnvironmentCondition == EnvironmentCondition.None) spriteRenderer.sprite = null;
+        else if ((currentEnvironmentCondition != EnvironmentCondition.PuddleAndShock && currentEnvironmentCondition != EnvironmentCondition.IceAndShock && currentEnvironmentCondition != EnvironmentCondition.Shock) && (this.transform.childCount > 0)) Destroy(this.transform.GetChild(0).gameObject);
+
+        //Update Condition
+        if (remainingConditionTime > 0)
         {
             remainingConditionTime -= Time.deltaTime;
             if(remainingConditionTime <= 0f)
@@ -94,8 +105,9 @@ public class Environment : MonoBehaviour
                 if(currentEnvironmentCondition == EnvironmentCondition.Puddle)
                 {
                     currentEnvironmentCondition = EnvironmentCondition.None;
-                    this.transform.GetComponent<SpriteRenderer>().sprite = null;
+                    spriteRenderer.sprite = null;
                     remainingConditionTime = 0f;
+                    animator.SetTrigger("Evaporate");
                 }
                 else if (currentEnvironmentCondition == EnvironmentCondition.PuddleAndShock)
                 {
@@ -106,8 +118,9 @@ public class Environment : MonoBehaviour
                 else if(currentEnvironmentCondition == EnvironmentCondition.Ice)
                 {
                     currentEnvironmentCondition = EnvironmentCondition.Puddle;
-                    this.transform.GetComponent<SpriteRenderer>().sprite = ControllerManager.Instance.getEnvironmentController().puddleSprite;
+                    spriteRenderer.sprite = ControllerManager.Instance.getEnvironmentController().puddleSprite;
                     remainingConditionTime = ControllerManager.Instance.getEnvironmentController().puddleDuration;
+                    animator.SetTrigger("Melt");
                 }
                 else if (currentEnvironmentCondition == EnvironmentCondition.IceAndShock)
                 {
@@ -121,9 +134,6 @@ public class Environment : MonoBehaviour
                     Destroy(this.transform.GetChild(0).gameObject);
                     remainingConditionTime = 0f;
                 }
-
-                //Disable Animation
-                this.transform.GetComponent<Animator>().enabled = false;
             }
         }
 	}
