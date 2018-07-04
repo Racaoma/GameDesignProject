@@ -361,9 +361,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthBar: {fileID: 114845447583351568}
   maxHitPoints: 30
-  speed: 0.7
+  speed: 0.6
   speedFactor: 0
-  spawnCost: 2
+  spawnCost: 3
   conditionAnimator: {fileID: 95854972345036126}
   conditionSpriteRenderer: {fileID: 212154067072091268}
 --- !u!114 &114845447583351568
